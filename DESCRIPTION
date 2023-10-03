@@ -1,13 +1,28 @@
 Package: IntroRUzK
 Type: Package
-Title: What the Package Does (Title Case)
+Title: A Political Science R Tutorial from the University of Cologne
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+  person("Ayjeren", "Bekmuratovna", , "jeren.jmv@gmail.com", 
+    role = "aut"),
+  person("Ingo", "Rohlfing", , "ingo.rohlfing@uni-passau.de",
+    role = "aut", comment = c(ORCID = "0000-0001-8715-4771")),
+  person("Jens", "Wäckerle", , "jens.waeckerle@uni-koeln.de",
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5108-7711"))
+    )
+Description: The package contains several tutorials for making first steps with
+    R. 
+License: `use_mit_license()`
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/jenswaeckerle/IntroRUzK
 BugReports: https://github.com/jenswaeckerle/IntroRUzK/issues
+Imports: 
+    learnr,
+    dplyr,
+    ggparliament,
+    ggplot2,
+    installr,
+    magrittr,
+    readr,
+    readxl
