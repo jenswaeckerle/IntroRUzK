@@ -196,7 +196,7 @@ With the objects `start_of_WWI` and `end_of_WWI`, you can now calculate the
 length of World War I *without* having to create a new object using an 
 assignment operator (just as with an ordinary calculator). 
 
-```{r assign_diff, exercise = TRUE, exercise.lines = 3, exercise.setup = "WWI"}
+```{r assign_diff, exercise = TRUE, exercise.lines = 3}
 end_of_WWI-start_of_WWI
 ```
 
