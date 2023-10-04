@@ -17,5 +17,5 @@ devtools::install_github("jenswaeckerle/IntroRUzK")
 ```
 6. Start the first lesson:
 ```
-learnr::run_tutorial("lesson1", "IntroRUzK")
+learnr::run_tutorial("1_Intro_R", "IntroRUzK")
 ```
