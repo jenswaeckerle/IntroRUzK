@@ -8,7 +8,9 @@ Students from the course "Introduction to Quantitative Methods" in the Master pr
 Steps:
 1. Download R (https://cran.r-project.org/)
 2. Download RStudio (https://posit.co/download/rstudio-desktop/)
-3. Install this tutorial: After opening RStudio type:
-devtools::install_github("jenswaeckerle/IntroZUzK")
-4. Start the first lesson:
-learnr::run_tutorial("lesson1", "IntroZUzK")
+3. Install the package "devtools", which is needed for the package, by copying the following code in the console and hitting enter:
+> install.packages("devtools")
+5. Install this tutorial: After opening RStudio type:
+> devtools::install_github("jenswaeckerle/IntroRUzK")
+6. Start the first lesson:
+> learnr::run_tutorial("lesson1", "IntroRUzK")
