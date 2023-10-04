@@ -13,7 +13,7 @@ options(tutorial.storage = list(
   get_object = function(...) NULL,
   get_objects = function(...) list(),
   remove_all_objects = function(...) { }
-)
+))
 library(learnr)
 ```
 
