@@ -732,7 +732,7 @@ selection of rows. Selected rows are delivered together with all columns. That
 is, if we do not specify a column **AND** a row, R assumes that we want to see every 
 row, or every column.
 
-```{r df_rc3, exercise=TRUE, exercise.lines = 13}
+```{r df_rc365467, exercise=TRUE, exercise.lines = 13}
 data(cabinet)
 # selecting the first and seventh rows
 cabinet[c(1, 7),]
