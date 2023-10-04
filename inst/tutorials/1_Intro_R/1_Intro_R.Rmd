@@ -8,6 +8,12 @@ description: This is a tutorial that introduces basics of data analysis using R.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(tutorial.storage = list(
+  save_object = function(...) { },
+  get_object = function(...) NULL,
+  get_objects = function(...) list(),
+  remove_all_objects = function(...) { }
+)
 library(learnr)
 ```
 
