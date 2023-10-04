@@ -586,7 +586,7 @@ colnames(cabinet)
 Find the dimensions of the elections data frame you have created before in the space below. And 
 answer the questions that follow.
 
-```{r df_dims_task, exercise=TRUE, exercise.lines = 5}
+```{r df_dims_task, exercise=TRUE, exercise.setup = "creating_data_frames", exercise.lines = 5}
 # Dimensions
 dim(elections)
 # Names
