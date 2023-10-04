@@ -4,10 +4,10 @@ The aim of the package is to teach R to students with a self-learning module, so
 The examples in this course are from political science, but no prior knowledge is needed to follow along.
 There are quizzes and coding exercises included in the tutorial, which will be useful to check progress.
 
-Steps:
+To start the course, please follow these steps:
 1. Download R (https://cran.r-project.org/)
 2. Download RStudio (https://posit.co/download/rstudio-desktop/)
-3. Install the package "devtools", which is needed for the package. After opening RStudio, copy the following code in the console and hit enter:
+3. Install the package "devtools", which is needed for the course. After opening RStudio, copy the following code in the console and hit enter:
 ```
 install.packages("devtools")
 ```
