@@ -910,7 +910,7 @@ Looks like it's 7. We therefore need to create a vector that has eight values.
 This new vector is a fictional party in a fictional election. We then add that 
 vector to the elections data frame.
 
-```{r df_crn7, eval = F, exercise=TRUE, exercise.lines = 11}
+```{r df_crn7667788990, eval = F, exercise=TRUE, exercise.lines = 11}
 # create new fictional election
 fict_election <- c("Cologne","city","2023-10-04",100,"Carnival party",NA,100)
 
