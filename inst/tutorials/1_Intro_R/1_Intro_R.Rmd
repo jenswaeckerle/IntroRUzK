@@ -210,7 +210,7 @@ when naming objects. Usually, you should only use:
 *If* you want to use a blank space in an object name, you can do it by putting 
 backticks (``) around the object name. Try to avoid this if you can.
 
-```{r object_w_blanks, exercise = TRUE, exercise.lines = 3, exercise.setup = "WWI"}
+```{r object_w_blanks, exercise = TRUE, exercise.lines = 3}
 `duration of WWI` <- end_of_WWI-start_of_WWI
 
 `duration of WWI` 
