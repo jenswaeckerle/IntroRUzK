@@ -530,8 +530,6 @@ collections of vectors in several specific forms: matrices or data frames.
 Matrices and data frames are very similar and we will focus on data frames
 in this chapter.
 
-## Topic 5.1: Data frames
-
 **1. Definition**  
 A data frame is the most common way of storing information for analysis.
 Strictly speaking, it is a collection of vectors of equal length. Each vector 
@@ -980,7 +978,7 @@ data("elections")
 
 ```
 
-## Topic 6: Packages
+## Topic 5: Packages
 
 Packages are akin to books that are specific to a field. Packages consist of 
 functions(verbs) that perform specific analysis. For instance, there are
@@ -1058,7 +1056,7 @@ DE_plot <- ggplot(DE_horseshoe, aes(x, y, colour = party_short)) +
 DE_plot
 ```
 
-## Topic 7: Tidy Data & Data manipulation
+## Topic 6: Tidy Data & Data manipulation
 
 ### Introducing dplyr
 
@@ -1496,7 +1494,7 @@ data("cabinet")
 
 Congratulations! If you made it until here, you have mastered foundational skills needed to work on data-related assignments. 
 
-## Topic 8: Advanced tidy: the pipe operator
+## Topic 7: Advanced tidy: the pipe operator
 
 This section is meant to be a breathing space where we get acquainted with a 
 new operator: **pipe operator**: `%>%`. The pipe operator is a special operator 
@@ -1581,7 +1579,7 @@ data("cabinet")
   
 ```
 
-## Topic 9: Import data into R
+## Topic 8: Import data into R
 Up to this point in this module, you have used datasets provided by us directly 
 to your working environment. When working with data tasks for your classes, 
 however, you will have to import various datasets. *Importing a dataset* means 
@@ -1629,7 +1627,7 @@ reading in data, such as `readr` and `readxl`. Now, we will cover two important
 functions from `readr` and from `readxl`. Most of data you will be working with 
 will come either in the **.csv** or **.xls** formats. 
 
-## Topic 10: Final thoughts
+## Topic 9: Final thoughts
 
 Updates of R and Rstudio are recommended to be done regularly 
 (RStudio will also remind you that it wants to be updated). Especially when working
