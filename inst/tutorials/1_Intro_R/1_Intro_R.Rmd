@@ -170,7 +170,7 @@ chunk and execute this line to see that you created this object (put the cursor
 somewhere in the third line and hit Command+Enter on your keyboard).
 
 ```{r start-WWI, exercise=TRUE, exercise.lines = 3}
-start_of_WWI = 1914
+start_of_WWI <- 1914
 
 start_of_WWI
 
@@ -195,6 +195,9 @@ length of World War I *without* having to create a new object using an
 assignment operator (just as with an ordinary calculator). 
 
 ```{r assign_diff, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
+start_of_WWI <- 1914
+end_of_WWI <- 1918
+
 end_of_WWI-start_of_WWI
 ```
 
@@ -209,6 +212,9 @@ when naming objects. Usually, you should only use:
 backticks (``) around the object name. Try to avoid this if you can.
 
 ```{r object_w_blanks, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
+start_of_WWI <- 1914
+end_of_WWI <- 1918
+
 `duration of WWI` <- end_of_WWI-start_of_WWI
 
 `duration of WWI` 
@@ -328,6 +334,8 @@ When you want to know of what type an object is, you can use the `class()`
 function to determine it. 
 
 ```{r numbers, exercise=TRUE, exercise.lines = 3}
+start_of_WWI <- 1914
+
 class(start_of_WWI)
 
 ```
@@ -471,8 +479,8 @@ previous exercise, let's select the first and third value in the vector:
 
 ```{r selecting_vector_position, exercise=TRUE, exercise.lines = 17}
 # Vector of countries that held elections
-elections_africa = c("Uganda", "Somalia", "Central African Republic", 
-                     "Nigeria", "Ivory Coast", "Republic of Congo")
+elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria",
+                     "Ivory Coast", "Republic of Congo")
 
 # Vector indicating if the elections were general or not
 general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
@@ -496,7 +504,8 @@ example, let's see if the elections in Uganda and Nigeria were general elections
 
 ```{r selecting_vector_name, exercise=TRUE, exercise.lines = 17}
 # Vector of countries that held elections
-elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria", "Ivory Coast", "Republic of Congo")
+elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria",
+                     "Ivory Coast", "Republic of Congo")
 
 # Vector indicating if the elections were general or not
 general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
@@ -511,7 +520,6 @@ general_elections["Uganda"]
 general_elections["Nigeria"]
 
 ```
-
 
 ## Topic 5: Grammar of R (Data frames)
 Using only vectors to run complex analysis is inefficient. Thus, most of your 
@@ -586,7 +594,6 @@ of both rows and columns of a data frame with the help of `rownames()` and
 ```{r df_dims, exercise=TRUE, exercise.lines = 13}
 # loading the data frame
 data("cabinet")
-head(cabinet)
 
 # Dimensions of the data
 dim(cabinet)
@@ -601,7 +608,8 @@ colnames(cabinet)
 Find the dimensions of the elections data frame you have created before in the space below. And 
 answer the questions that follow.
 
-```{r df_dims_task, exercise=TRUE, exercise.setup = "creating_data_frames", exercise.lines = 5}
+```{r df_dims_task, exercise=TRUE, exercise.lines = 5}
+data("elections")
 # Dimensions
 dim(elections)
 # Names
@@ -627,6 +635,7 @@ function. This function displays the structure of the data frame with variables,
 their types as well as a brief view of those variables: 
 
 ```{r df_str, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # Investigating the structure of the data frames
 str(cabinet)
 ```
@@ -635,6 +644,7 @@ Now, investigate the structure of the elections data frame in the space
 below and answer the following question:
 
 ```{r df_stud_str, exercise=TRUE, exercise.lines = 3}
+data("elections")
 # Investigating the structure of elections_eu
 str(elections)
 ```
@@ -654,6 +664,7 @@ Additionally, we can also just look at the first and last several observations
 of a data frame with the help of two functions called `head()` and `tail()`:
 
 ```{r df_ht, exercise=TRUE, exercise.lines = 8}
+data("cabinet")
 # Investigating the top and bottom observations
 head(cabinet)
 tail(cabinet)
@@ -664,6 +675,7 @@ data frame with the help of the `summary()` function. This function provides
 summary statisitcs about each variable in a data frame. For example:
 
 ```{r df_summary, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # Summary of the data
 summary(cabinet)
 ```
@@ -688,6 +700,7 @@ We first select the first row and second column in their entirety. Afterwards,
 we look at the value in the first row and second column of the data:
 
 ```{r df_rc1, exercise=TRUE, exercise.lines = 13}
+data("cabinet")
 # selecting the first row
 cabinet[1, ]
 
@@ -702,6 +715,7 @@ Now test your understanding in the following snippet. Select the value which is
 located in the tenth row and third column of the cabinet dataset: 
 
 ```{r df_rc_e1, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 
 
 ```
@@ -712,6 +726,7 @@ names - or string data for elements of a data frame - they have to be specified
 within quotation marks:
 
 ```{r df_rc2, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 # selecting the first column
 cabinet["country_name"]
 ```
@@ -721,6 +736,7 @@ You will see this a lot in code, given that it saves a litte bit of code. The re
 is exactly the same, just formatted a little different in the output.
 
 ```{r df_rc3, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 # selecting the first column
 cabinet$country_name
 ```
@@ -729,6 +745,7 @@ Using *selection by name*, select the column from the data frame which specifies
 the number of seats in the cabinet data frame:
 
 ```{r df_rc_e2, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 
 
 ```
@@ -748,7 +765,7 @@ is, if we do not specify a column **AND** a row, R assumes that we want to see e
 row, or every column.
 
 ```{r df_rc365467, exercise=TRUE, exercise.lines = 13}
-data(cabinet)
+data("cabinet")
 # selecting the first and seventh rows
 cabinet[c(1, 7),]
 
@@ -763,6 +780,7 @@ In the following snippet, select (1) 8th and 9th rows, (2) 13th and 14th
 columns, and (3) then select the specified rows and columns from the previous 
 steps at once:
 ```{r df_rc_e3, exercise=TRUE, exercise.lines = 10}
+data("cabinet")
 
 
 ```
@@ -780,6 +798,7 @@ column selection together. Pay attention to the fact that both the starting and
 ending values are included in the resulting selection data. 
 
 ```{r df_rc4, exercise=TRUE, exercise.lines = 10}
+data("cabinet")
 # selecting columns starting from 3 to 11
 cabinet[, 3:11]
 
@@ -797,6 +816,7 @@ specifications in steps 1 and 2 at once. Also feel free to play around with
 additional code
 
 ```{r df_rc_e4, exercise=TRUE, exercise.lines = 11}
+data("cabinet")
 
 
 ```
@@ -829,16 +849,20 @@ the selection. Here is how we can replace it:
 
 
 ```{r df_ai1, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 # replacing a sequence of values in a column
 cabinet$seats[c(1:5)] <- 13
+
 ```
 
 Now, let's imagine that the values for 1st and 5th rows of the seats column 
 needs to be replaced by 10. We can use the same logic as above to do so:
 
 ```{r df_ai2, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 #replacing the 1st and 5th row values
 cabinet$seats[c(1,5)] <- 10
+
 ```
 
 In the following snippet, (1) replace the values in rows 9-15 of the column 
@@ -846,6 +870,7 @@ In the following snippet, (1) replace the values in rows 9-15 of the column
 `election_seats_total` column with a number 80
 
 ```{r df_ai_e1, exercise=TRUE, exercise.lines = 11}
+data("cabinet")
 
 
 ```
@@ -859,6 +884,7 @@ example, let's rename `election_seats_total` which is the 10th column to
 `total_seats`:
 
 ```{r df_crn2, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 # rename the column 
 colnames(cabinet)[10] <- "total_seats"
 head(cabinet)
@@ -869,6 +895,7 @@ In the space provided below, rename the column `country_name` to
 `country_name_long`.
 
 ```{r df_crn4, exercise=TRUE, exercise.lines = 4}
+data("cabinet")
 
 
 
@@ -894,6 +921,7 @@ the `cabinet` (*again paying attention to the fact that both of the data frames
 should have then the same length, or number of rows*).
 
 ```{r df_crn5, exercise=TRUE, exercise.lines = 12}
+data("cabinet")
 dim(cabinet)
 
 # create a numeric column
@@ -903,8 +931,9 @@ fictional_vector <- c(1:12085)
 cabinet$added_vector <- fictional_vector
 
 # another way of adding a column
-cabinet <- cbind(cabinet, fictional_vector)
-head(cabinet)
+cabinet_added <- cbind(cabinet, fictional_vector)
+head(cabinet_added)
+
 ```
 
 Similarly, rows can be added to a data frame. Usually, large data frames contain 
@@ -918,7 +947,9 @@ We are going back to the elections data frame we worked on before.
 First, check how many columns it has now:
 
 ```{r df_crn7, eval = F, exercise=TRUE, exercise.lines = 11}
+data("elections")
 ncol(elections)
+
 ```
 
 Looks like it's 7. We therefore need to create a vector that has eight values.
@@ -926,6 +957,7 @@ This new vector is a fictional party in a fictional election. We then add that
 vector to the elections data frame.
 
 ```{r df_crn7667788990, eval = F, exercise=TRUE, exercise.lines = 11}
+data("elections")
 # create new fictional election
 fict_election <- c("Cologne","city","2023-10-04",100,"Carnival party",NA,100)
 
@@ -934,12 +966,14 @@ elections <- rbind(elections,fict_election)
 
 # inspect the new end of the data frame
 tail(elections)
+
 ```
 
 In a similar vein, add a new fictional election result in your home town, with a 
 made-up party and election date.
 
 ```{r df_crn8, exercise=TRUE, exercise.lines = 11}
+data("elections")
 
 
 ```
@@ -956,14 +990,17 @@ field-specific packages are available via an R-specific library called
 When using packages in R, we have to remember two important things. First, 
 we have to download packages from CRAN. This is done with a special 
 function `install.packages("package name")`. As you can see in the example below,
-we have to make sure to incorporate the name of the package in quotation marks:
+we have to make sure to incorporate the name of the package in quotation marks.
+In the example below, both installations are commented out (the line starts with a `#`),
+which means it will not be evaluated. This is because the packages are already installed
+after you installed this tutorial.
 
 ```{r pack_ins1, eval = F, exercise=TRUE, exercise.lines = 7}
 # example of installing a package
-install.packages("ggplot2") # ggplot is a package that allows us to visualize data
+# install.packages("ggplot2") # ggplot is a package that allows us to visualize data
 
 # installing the ggparliament package
-install.packages("ggparliament")
+# install.packages("ggparliament")
 
 ```
 
@@ -1067,6 +1104,7 @@ use the quotation marks when selecting a column with `dplyr` functions:
 
 
 ```{r dplyr2, exercise=TRUE, exercise.lines = 5}
+data("cabinet")
 # selecting a single variable
 select(.data = cabinet, seats)
 
@@ -1080,6 +1118,7 @@ called `election_date` and assign the selection to a new data frame called
 `cabinet_subset`:
 
 ```{r dplyr3, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # selecting a single variable
 cabinet_subset <- select(.data = cabinet, seats, election_date)
 
@@ -1092,6 +1131,7 @@ Do not forget to assign the selection to a new data frame called `cabinet_sub`.
 We will use the created subset in the end of the chapter to create a chart. 
 
 ```{r dplyr4, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # selecting and assign
 
 
@@ -1115,6 +1155,7 @@ filter for the value `2017` in the column `year`, and save the subset in a new
 data frame called `cabinets_2017`: 
 
 ```{r dplyr5, exercise=TRUE, exercise.lines = 5}
+data("cabinet")
 # filtering for Germany
 cabinets_2017 <- filter(cabinet, year == 2017)
 head(cabinets_2017)
@@ -1132,6 +1173,7 @@ column `country_name`, and the value we are interested in is `Germany`. We will
 save the subsetted data in a new data frame called `cabinet_DE_2017`:
 
 ```{r dplyr6, exercise=TRUE, exercise.lines = 5}
+data("cabinet")
 # filtering for Germany
 cabinet_DE_2017 <- filter(cabinet, year == 2017, country_name == "Germany")
 head(cabinet_DE_2017)
@@ -1143,6 +1185,7 @@ called `cabinet_AUS_2001` which includes the subset of the `cabinet` data for
 Australian cabinet of 2001.
 
 ```{r dplyr7, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # filtering Australia in 2001
 
 ```
@@ -1163,6 +1206,7 @@ and (2) secondly we will *filter* the data to only include values for Bulgaria.
 Let's name the subset data BG_subset. 
 
 ```{r dplyr8, exercise=TRUE, exercise.lines = 7}
+data("cabinet")
 BG_subset <- filter(cabinet,country_name == "Bulgaria")
 BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
 head(BG_subset)
@@ -1173,6 +1217,10 @@ election. This data can be easily reordered based on the values of the
 `party_name` variable with the `arrange()` function as follows:
 
 ```{r dplyr9, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
+BG_subset <- filter(cabinet,country_name == "Bulgaria")
+BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
+
 # arranging by party name
 arrange(BG_subset, party_name_english)
 ```
@@ -1187,6 +1235,10 @@ not work in other contexts.* Let's see the application with
 the previous example:
 
 ```{r dplyr10, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
+BG_subset <- filter(cabinet,country_name == "Bulgaria")
+BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
+
 # arranging by party name
 arrange(BG_subset, desc(party_name_english))
 ```
@@ -1203,6 +1255,10 @@ alphabetically and then by year in chronological order
 
 
 ```{r dplyr11, exercise=TRUE, exercise.lines = 7}
+data("cabinet")
+BG_subset <- filter(cabinet,country_name == "Bulgaria")
+BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
+
 # arranging by party name and reverse chronologically
 arrange(BG_subset, party_name_english, year)
 ```
@@ -1216,6 +1272,7 @@ The data should be arranged such that the parties with the highest number of
 seats are presented.
 
 ```{r dplyr12, exercise=TRUE, exercise.lines = 15}
+data("cabinet")
 
 
 
@@ -1235,6 +1292,7 @@ statistic is required. Let's calculate the average number of seats in our
 `cabinet` data as an example: 
 
 ```{r dplyr13, exercise=TRUE, exercise.lines = 15}
+data("cabinet")
 # calculate the mean number of seats in our cabinet data
 summarise(cabinet, mean(seats))
 ```
@@ -1245,6 +1303,7 @@ data in a simpler way by simply including the seats column inside the `mean()`
 function:
 
 ```{r dplyr14, exercise=TRUE, exercise.lines = 3}
+data("cabinet")
 # simpler way of finding the average
 mean(cabinet$seats)
 ```
@@ -1259,6 +1318,7 @@ for the first three countries (Australia, Austria and Belgium) and calculate the
 mean with base R:
 
 ```{r dplyr15, exercise=TRUE, exercise.lines = 20}
+data("cabinet")
 # Subsets
 # subset for Australia
 AU_subset <- cabinet[country_name == "Australia",]
@@ -1293,6 +1353,7 @@ based on a certain column. It is important to know that nothing in the data fram
 changes when we apply the `group_by()` on its own. See below, for instance:
 
 ```{r dplyr16, exercise=TRUE, exercise.lines = 5}
+data("cabinet")
 # group_by introduction
 group_by(cabinet, country_name)
 
@@ -1305,6 +1366,7 @@ of that column. That is, let's group the `cabinet` data by `country_name` again.
 And then calculate the average `seats` for the grouped data: 
 
 ```{r dplyr17, exercise=TRUE, exercise.lines = 7}
+data("cabinet")
 # group_by icountry
 grouped_cabinet <- group_by(cabinet, country_name)
 
@@ -1323,6 +1385,7 @@ an example, let's group the `cabinet` data not only by country but also by
 election year. 
 
 ```{r dplyr18, exercise=TRUE, exercise.lines = 7}
+data("cabinet")
 # grouping by country, year
 grouped_cabinet <- group_by(cabinet, country_name, year)
 
@@ -1342,6 +1405,7 @@ the names for each of the resulting data yourself.
 
 
 ```{r dplyr19, exercise=TRUE, exercise.lines = 13}
+data("cabinet")
 
 
 
@@ -1393,6 +1457,14 @@ column by the `election_seats_total` column. Here is how it all looks in code:
 
 
 ```{r dplyr21, eval = F, exercise=TRUE, exercise.lines = 7}
+data("cabinet")
+# Subset the data first
+cabinet_subset <- select(cabinet, country_name, party_name_english, 
+                         year, seats, election_seats_total)
+
+# Group the data
+cabinet_group <- group_by(cabinet_subset, party_name_english, year)
+
 # mutating the data
 cabinet_mutated <- mutate(cabinet_group, seat_proportion = seats/election_seats_total)
 
@@ -1414,6 +1486,7 @@ The second variable called `squared.diff` should equal to the square of the vari
 you have created in the previous step.
 
 ```{r dplyr22, exercise=TRUE, exercise.lines = 15}
+data("cabinet")
 
 
 ```
@@ -1438,7 +1511,7 @@ code below:
 
 ```{r pipe, eval = F, exercise=TRUE, exercise.lines = 33}
 # loading the data
-data(cabinet)
+data("cabinet")
 
 # selecting the needed columns
 cabinet_selected <- select(cabinet, country_name, party_name, year, seats)
@@ -1476,6 +1549,7 @@ the pipe operator as follows:
 ```{r pipe1, eval = F, exercise=TRUE, exercise.lines = 33}
 # loading the magrittr library
 library(magrittr)  # %>% operator comes from magrittr
+data("cabinet")
 
 # selecting the needed columns
 cabinet_mutant <- cabinet %>% # take the cabinet data, THEN
@@ -1499,6 +1573,7 @@ data frame `cabinet_FR`.
 
 ```{r pipe2, exercise=TRUE, exercise.lines = 23}
 # Create the defined subset with the pipe operator
+data("cabinet")
 
   
 ```
@@ -1517,11 +1592,11 @@ usually you would not need them both.
 
 ```{r readr, eval = F, exercise=TRUE, exercise.lines = 10}
 # Installing and loading the readr package
-install.packages("readr")
+# install.packages("readr")
 library(readr)
 
 # Installing and loading the readxl
-install.packages("readxl")
+# install.packages("readxl")
 library(readxl)
   
 ```
@@ -1564,10 +1639,10 @@ marks:
 
 ```{r readr1, eval = F, exercise=TRUE, exercise.lines = 7}
 # Reading in the country_name.csv
-country_name <- read_csv("country_name.csv")
+parties <- read_csv("view_party.csv")
 
 # inspect the data
-head(country_name)
+head(parties)
   
 ```
 
@@ -1582,12 +1657,12 @@ cases, we can set the `col_names` argument to `FALSE` as in the example below:
 
 ```{r readr2, eval = F,  exercise=TRUE, exercise.lines = 10}
 # Reading in by changing the col names
-country_name2 <- read_csv("country_name.csv", 
+parties2 <- read_csv("view_party.csv", 
                          col_names = FALSE) # we told R not to treat
                                             # the first row as col names
 
 # Now look at the again
-head(country_name2)
+head(parties2)
   
 ```
 
