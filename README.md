@@ -5,13 +5,14 @@ The examples in this course are from political science, but no prior knowledge i
 There are quizzes and coding exercises included in the tutorial, which will be useful to check progress.
 
 To start the course, please follow these steps:
-1. Download R (https://cran.r-project.org/)
-2. Download RStudio (https://posit.co/download/rstudio-desktop/)
-3. Install the package "devtools", which is needed for the course. After opening RStudio, copy the following code in the console and hit enter:
+1. Download R (https://cran.r-project.org/) and install it. Get the newest version that fits your operating system. You don't have to ever open R, just download it.
+2. Download RStudio (https://posit.co/download/rstudio-desktop/) and install it. Again, get the newest version that fits your operating system.
+3. Open RStudio.
+4. Install the package "devtools", which is needed for the course. After opening RStudio, copy the following code in the console and hit enter. The installation will take a while, during which there is a bunch of red text flashing through the console. Don't panic. It's fine.
 ```
 install.packages("devtools")
 ```
-5. Install this tutorial by running the following code in the same way:
+5. Install this tutorial by running the following code in the same way. Again, there will be red texts, which looks like errors, but are not (hopefully).
 ```
 devtools::install_github("jenswaeckerle/IntroRUzK")
 ```
