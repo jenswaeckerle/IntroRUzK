@@ -1,9 +1,9 @@
 ---
-title: "Your Introduction to Data with R"
-author: "Ayjeren R. Bekmuratovna, Ingo Rohlfing"
+title: "Introduction to R for University of Cologne Political Science"
+author: "Ayjeren R. Bekmuratovna, Ingo Rohlfing, Jens Wäckerle"
 output: learnr::tutorial
 runtime: shiny_prerendered
-description: This is a tutorial that introduces basics of data analysis using R.
+description: University of Cologne Political Science Introduction to R.
 ---
 
 ```{r setup, include=FALSE}
@@ -19,27 +19,20 @@ library(learnr)
 
 
 ## Topic 1: Introduction to R and RStudio
-A video tutorial introducing R, RStudio, how to download them, main panels and basic logic: to be inserted. 
 
-![]()
+R is a powerful, free and open-source program for statistical computing. It is 
+fast becoming the standard software for data analysis in the social sciences,
+particularly in political science. Some of its key advantages are:
 
-### Exercise 
+* It is extremely flexible, almost anything can be done with it.
+* It is free.
+* It is constantly improving. R code now is much more accessible, faster, and 
+powerful than previously.
+* Once you master the basics, it is just a matter of adjusting that code to new data.
 
-*Here's a simple exercise with an empty code chunk. Multiple options are correct.* 
-
-What can R be used for?:
-
-```{r quiz_what_is_r, echo=FALSE}
-question("R can be used for",
-         answer("Basic calculation", correct = TRUE),
-         answer("Data import and management", correct = TRUE),
-         answer("Data creation"),
-         answer("Data analysis", correct = TRUE),
-         answer("Data visualisation", correct = TRUE),
-         allow_retry = TRUE
-)
-```
-
+These basics are what this course is about. It will introduce you to everything
+you need to know to use R. Once you complete this course, you can build on what 
+you've learned.
 
 ## Topic 2: Grammar of R (Operators)
 As any other programming language, R has its own unique grammar. Arguably, the 
@@ -49,7 +42,7 @@ groups in R:
 * Operators
 * Functions 
 
-We first dive into operators and consider verbs later.
+We first dive into operators and consider functions later.
 
 ### Operators
 
@@ -76,6 +69,7 @@ For an example, press "Run code" below:
 
 ```{r modulo, exercise=TRUE, exercise.lines = 1}
 7 / 5
+
 ```
 
 
@@ -100,9 +94,8 @@ a^b
 
 # Modulo
 a %% b
+
 ```
-
-
 
 ## Topic 2.2: Logical operators
 
@@ -123,8 +116,8 @@ because 5 is **not** less than 4:
 
 ```{r less_than, exercise=TRUE, exercise.lines = 1}
 5 < 4
-```
 
+```
 
 #### Exercise for arithmetic operators
 Replace the alphabetic placeholders `a` and `b` below with numbers of your
@@ -148,10 +141,8 @@ a == b
 
 # Not equal
 a != b
+
 ```
-
-
-
 
 ## Topic 2.3: Assignment operators
 An assignment operator are a special type of verb. It is are akin to the verb 
@@ -160,8 +151,8 @@ An assignment operator are a special type of verb. It is are akin to the verb
 * `<-`
 * `=`
 
-Both are used to give (= assign to) a name to a value or a set of values. However, 
-in practice you should **always** use `<-`.  
+Both are used to assign a name to a value or a set of values. However, 
+in practice you should **almost always** use `<-`.  
 With the following code, we tell R that we want to save the number 1914 under the 
 name `start_of_WWI` (World War I). This name alongside with the number will 
 be stored in the R environment, which can be understood as the memory you are 
@@ -182,12 +173,13 @@ somewhere in the third line and hit Command+Enter on your keyboard).
 start_of_WWI = 1914
 
 start_of_WWI
+
 ```
 
 We now create a second object with the other operator `<-`. The name of the 
 object that you create always has to be on the side of the arrow's head. 
 
-```{r end-WWI, exercise=TRUE, exercise.lines = 3}
+```{r end-WWI, exercise=TRUE, exercise.setup = "start-WWI", exercise.lines = 3}
 end_of_WWI <- 1918
 ```
 
@@ -202,7 +194,7 @@ With the objects `start_of_WWI` and `end_of_WWI`, you can now calculate the
 length of World War I *without* having to create a new object using an 
 assignment operator (just as with an ordinary calculator). 
 
-```{r assign_diff, exercise = TRUE, exercise.lines = 3}
+```{r assign_diff, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
 end_of_WWI-start_of_WWI
 ```
 
@@ -216,12 +208,11 @@ when naming objects. Usually, you should only use:
 *If* you want to use a blank space in an object name, you can do it by putting 
 backticks (``) around the object name. Try to avoid this if you can.
 
-```{r object_w_blanks, exercise = TRUE, exercise.lines = 3}
+```{r object_w_blanks, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
 `duration of WWI` <- end_of_WWI-start_of_WWI
 
 `duration of WWI` 
 ```
-
 
 #### Exercise for assignment operators
 
@@ -234,6 +225,8 @@ year we have.
 
 ```{r create_obj, exercise=TRUE, exercise.lines = 5}
 
+
+
 ```
 
 ## Topic 3: Grammar of R (Functions)
@@ -243,6 +236,7 @@ numbers that you specify.
 
 ```{r sum_func, exercise=TRUE, exercise.lines = 3}
 sum(1, 2)
+
 ```
 
 The function adds any number of digits and returns the result of the summation 
@@ -251,6 +245,7 @@ actual numbers of your own choice:
 
 ```{r sum_func_1, eval = F, exercise=TRUE, exercise.lines = 3}
 sum(a, b, c)
+
 ```
 
 Every function performs a specific task. Functions always have at least one 
@@ -279,6 +274,7 @@ Now play around with this function. What is the result when you run this chunk?
 
 ```{r default-digits, exercise = TRUE, exercise.lines = 1}
 round(2.654)
+
 ```
 
 You get a natural number because the default setting is zero digits. If you want
@@ -286,6 +282,7 @@ it rounded to one decimal place, you need this.
 
 ```{r two-digits, exercise = TRUE, exercise.lines = 1}
 round(2.654, digits = 1)
+
 ```
 
 You can also write it in these two equivalent ways. In the first line, R takes 
@@ -299,6 +296,7 @@ the first line.
 round(2.654, 2)
 
 round(digits = 2, 2.654)
+
 ```
 
 It is particularly important to pay attention to the order of arguments and 
@@ -310,7 +308,6 @@ their default values when:
 arguments, their number and default values might have changed.
 
 ## Topic 4: Grammar of R (Data Types & Vectors)
-**Video tutorial here**
 
 ## Topic 4.1: Data Types
 R allows you to process and work with different types of data having different 
@@ -332,6 +329,7 @@ function to determine it.
 
 ```{r numbers, exercise=TRUE, exercise.lines = 3}
 class(start_of_WWI)
+
 ```
 
 ### Strings
@@ -348,6 +346,7 @@ For example, let us save the name of the current UN Secretary General in R:
 UN_Gen_Sec = "António Guterres"
 
 UN_Gen_Sec
+
 ```
 
 ### Logical values
@@ -365,6 +364,7 @@ num_parl_or_pres = parl_gov < pres_gov
 
 # check the answer object
 num_parl_or_pres
+
 ```
 
 ### Missing values
@@ -376,6 +376,7 @@ missing value to an object about the elections in North Korea.
 elections_North_Korea = NA
 
 elections_North_Korea
+
 ```
 
 ## Topic 4.2: Vectors
@@ -402,6 +403,7 @@ called elections_africa:
 elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria", "Ivory Coast", "Republic of Congo")
 
 elections_africa
+
 ```
 
 Similar to the vector of strings, we easily create a numeric vector with the 
@@ -415,6 +417,7 @@ place in January, `2` in February and `3` in March.
 elections_months = c(1, 2, 2, 2, 3, 3)
 
 elections_months
+
 ```
 
 Lastly, using the same function we can create logical vectors. For example, 
@@ -427,6 +430,7 @@ elections were not general:
 general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 
 general_elections
+
 ```
 
 **Naming Vectors**
@@ -446,6 +450,7 @@ general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 # Naming the general elections vector
 names(general_elections) = elections_africa
 general_elections
+
 ```
 
 As you can see in the printout, the vector general_elections has now a country 
@@ -480,6 +485,7 @@ general_elections[1]
 
 # Selecting the third value in a vector
 general_elections[3]
+
 ```
 
 Another approach to selecting a value from a vector is using a name. Similar to 
@@ -503,6 +509,7 @@ general_elections["Uganda"]
 
 # Selecting the value for Nigeria
 general_elections["Nigeria"]
+
 ```
 
 
@@ -564,6 +571,7 @@ elections <- data.frame(country_name, election_type,
                            row.names = NULL)
 
 head(elections)
+
 ```
 
 **3. Looking at the dimensions of a data frame**
@@ -587,6 +595,7 @@ ncol(cabinet)
 
 # Names 
 colnames(cabinet)
+
 ```
 
 Find the dimensions of the elections data frame you have created before in the space below. And 
