@@ -1216,7 +1216,7 @@ As you can see in the subset, the data seems to be ordered by the year of
 election. This data can be easily reordered based on the values of the
 `party_name` variable with the `arrange()` function as follows:
 
-```{r dplyr9, exercise=TRUE, exercise.lines = 3}
+```{r dplyr9, exercise=TRUE, exercise.lines = 7}
 data("cabinet")
 BG_subset <- filter(cabinet,country_name == "Bulgaria")
 BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
@@ -1234,7 +1234,7 @@ that `desc()` is an internal function of the `dplyr` function. *Thus, it will
 not work in other contexts.* Let's see the application with 
 the previous example:
 
-```{r dplyr10, exercise=TRUE, exercise.lines = 3}
+```{r dplyr10, exercise=TRUE, exercise.lines = 7}
 data("cabinet")
 BG_subset <- filter(cabinet,country_name == "Bulgaria")
 BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
@@ -1291,7 +1291,7 @@ statistics we are interested in together with a variable for which the summary
 statistic is required. Let's calculate the average number of seats in our 
 `cabinet` data as an example: 
 
-```{r dplyr13, exercise=TRUE, exercise.lines = 15}
+```{r dplyr13, exercise=TRUE, exercise.lines = 7}
 data("cabinet")
 # calculate the mean number of seats in our cabinet data
 summarise(cabinet, mean(seats))
@@ -1302,7 +1302,7 @@ first place. Since, we could have calculated the mean for seats of the cabinet
 data in a simpler way by simply including the seats column inside the `mean()` 
 function:
 
-```{r dplyr14, exercise=TRUE, exercise.lines = 3}
+```{r dplyr14, exercise=TRUE, exercise.lines = 7}
 data("cabinet")
 # simpler way of finding the average
 mean(cabinet$seats)
@@ -1321,13 +1321,13 @@ mean with base R:
 data("cabinet")
 # Subsets
 # subset for Australia
-AU_subset <- cabinet[country_name == "Australia",]
+AU_subset <- cabinet[cabinet$country_name == "Australia",]
 
 # Subset for Austria
-AT_subset <- cabinet[country_name == "Austria",]
+AT_subset <- cabinet[cabinet$country_name == "Austria",]
 
 # Subset for Belgium
-BE_subset <- cabinet[country_name == "Belgium",]
+BE_subset <- cabinet[cabinet$country_name == "Belgium",]
 
 # Averages 
 mean(AU_subset$seats)
