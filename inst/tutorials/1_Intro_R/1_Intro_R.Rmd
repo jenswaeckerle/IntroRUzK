@@ -1626,49 +1626,6 @@ reading in data, such as `readr` and `readxl`. Now, we will cover two important
 functions from `readr` and from `readxl`. Most of data you will be working with 
 will come either in the **.csv** or **.xls** formats. 
 
-Let's start with the **.csv** and `readr`. The most important function from 
-`readr` is called `read_csv()`. Intuitively, it reads in csv files. We have
-placed a data frame saved in the **.csv** format, it is called 
-**country_name.csv**, let's see how to read it. When reading in a dataset, we 
-first to have create a name with which we want to use it. Let's call ours 
-`country_name`. Then we assign to that name the output of a function `read_csv()`.
-The first argument inside the function is the name of the data file as it is
-stored in a folder on our computer, or on any other source. Once again, since
-we are dealing with names, we have to put the name of the data file in quotation 
-marks:
-
-```{r readr1, eval = F, exercise=TRUE, exercise.lines = 7}
-# Reading in the country_name.csv
-parties <- read_csv("view_party.csv")
-
-# inspect the data
-head(parties)
-  
-```
-
-Congratulations, you have just **imported** your first data! Now, `read_csv()` 
-has additional useful arguments. We will cover two of the most important, called
-`col_names` and `skip`. The first of these, `col_names`, accepts as a value either 
-`TRUE` or `FALSE`. By default (automatically), the value is set to `TRUE`, and as
-such `read_csv()` basically treats the first row of the original dataset as 
-column names. Sometimes, however, the first row of a dataset is not a column 
-name, we sometimes get the data where column names are not included. In such
-cases, we can set the `col_names` argument to `FALSE` as in the example below:
-
-```{r readr2, eval = F,  exercise=TRUE, exercise.lines = 10}
-# Reading in by changing the col names
-parties2 <- read_csv("view_party.csv", 
-                         col_names = FALSE) # we told R not to treat
-                                            # the first row as col names
-
-# Now look at the again
-head(parties2)
-  
-```
-
-As you might have noticed upon the inspection, the data does not have column 
-names anymore, and the first row - country_names - is treated as a value. 
-
 ## Topic 9: Final thoughts
 
 Updates of R and Rstudio are recommended to be done regularly 
