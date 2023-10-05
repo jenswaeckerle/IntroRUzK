@@ -65,6 +65,7 @@ operators. Each of them allows to conduct simple arithmetic tasks such as adding
 3. Multiplication: `*`
 4. Division: `/`
 5. Exponentiation: `^`
+
 For an example, press "Run code" below:
 
 ```{r modulo, exercise=TRUE, exercise.lines = 1}
@@ -145,7 +146,7 @@ a != b
 ```
 
 ## Topic 2.3: Assignment operators
-An assignment operator are a special type of verb. It is are akin to the verb 
+An assignment operator is a special type of verb. It is akin to the verb 
 **to be**. There are two of them that work in almost the same way:
 
 * `<-`
@@ -236,6 +237,7 @@ year we have.
 ```
 
 ## Topic 3: Grammar of R (Functions)
+
 Functions are similar to verbs and perform an action. The action could be a 
 calculation, the plotting of a graph etc. For example, `sum()` simply adds the 
 numbers that you specify.
@@ -256,7 +258,7 @@ sum(a, b, c)
 
 Every function performs a specific task. Functions always have at least one 
 *argument*, very often more than one. `sum()` has at a minimum two arguments
-because one needs two numbers for building a sum. In the chunks above, we 
+because you need at least two numbers for building a sum. In the chunks above, we 
 represented the arguments by the letters `a`, `b` and `c`. You can get an idea 
 about the arguments of a function by typing `help()`, which is a function 
 itself, and include the name of the function *without* brackets 
@@ -278,7 +280,7 @@ It has two arguments. In this order:
 
 Now play around with this function. What is the result when you run this chunk?
 
-```{r default-digits, exercise = TRUE, exercise.lines = 1}
+```{r default-digits, exercise = TRUE, exercise.lines = 3}
 round(2.654)
 
 ```
@@ -313,14 +315,14 @@ their default values when:
 - the function is regularly updated by a programmer because the types of 
 arguments, their number and default values might have changed.
 
-## Topic 4: Grammar of R (Data Types & Vectors)
+## Topic 4: Grammar of R (Data Types, Vectors & Data Frames)
 
 ## Topic 4.1: Data Types
 R allows you to process and work with different types of data having different 
 values. These are important types for our purposes:
 
-- **numbers** (aka as **numeric values**)
-- **strings** (aka as **characters**)
+- **numbers** (also known as **numeric values**)
+- **strings** (also known as **characters**)
 - **logical values**
 - **missing values**
 
@@ -342,10 +344,10 @@ class(start_of_WWI)
 
 ### Strings
 Strings, or character data, are data that is stored as text (individual letters,
-words, sentences etc.). For example, party labels or city names can be stored 
-as named objects in R. Note in the code below that, unlike the numeric values,
+words, sentences, etc.). For example, party labels or city names can be stored 
+as objects in R. Note in the code below that, unlike the numeric values,
 one assigns textual data to an object with the help of quotation marks. 
-Quotation marks is the syntax that makes it clear to R that what comes in them 
+Quotation marks are the syntax that makes it clear to R that what comes in them 
 is textual information.
 
 For example, let us save the name of the current UN Secretary General in R:
@@ -364,14 +366,14 @@ result as an object that contains a logical value. Notice that the results of
 comparative operations can be automatically saved as an object:
 
 ```{r logicals, exercise=TRUE, exercise.lines = 10}
-parl_gov = 21
-pres_gov = 1
+large_number <- 21
+low_number <- 1
 
 # compare the values and save the answer
-num_parl_or_pres = parl_gov < pres_gov
+bigger_number <- large_number < low_number
 
 # check the answer object
-num_parl_or_pres
+bigger_number
 
 ```
 
@@ -381,7 +383,7 @@ Finally, R has a special way of saving missing values under the label `NA`.
 missing value to an object about the elections in North Korea.
 
 ```{r missing_values, exercise=TRUE, exercise.lines = 3}
-elections_North_Korea = NA
+elections_North_Korea <- NA
 
 elections_North_Korea
 
@@ -408,7 +410,7 @@ called elections_africa:
 
 ```{r string_vector, exercise=TRUE, exercise.lines = 5}
 # Creating a string vector
-elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria", "Ivory Coast", "Republic of Congo")
+elections_africa <- c("Uganda", "Somalia", "Central African Republic", "Nigeria", "Ivory Coast", "Republic of Congo")
 
 elections_africa
 
@@ -421,8 +423,8 @@ from the exercise above took place. Number `1`indicates that elections took
 place in January, `2` in February and `3` in March.
 
 ```{r numeric_vector, exercise=TRUE, exercise.lines = 5}
-# Creating a numeric vector where
-elections_months = c(1, 2, 2, 2, 3, 3)
+# Creating a numeric vector 
+elections_months <- c(1, 2, 2, 2, 3, 3)
 
 elections_months
 
@@ -434,29 +436,29 @@ not. `TRUE` indicates that elections were general while `FALSE` means that
 elections were not general:  
 
 ```{r logical_vector, exercise=TRUE, exercise.lines = 5}
-# Creating a numeric vector
-general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+# Creating a logical vector
+general_elections <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 
 general_elections
 
 ```
 
 **Naming Vectors**
-One can also name vectors in R. When naming a vector, we assign a name to each 
+We can also name vectors in R. When naming a vector, we assign a name to each 
 element of a vector. It can be done with the help of a function called names. 
 In the following example, we use the elections_vector as a way of naming the 
 general_elections vector as follows:
 
 ```{r naming_vectors, exercise=TRUE, exercise.lines = 11}
 # Vector of countries that held elections
-elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria",
+elections_africa <- c("Uganda", "Somalia", "Central African Republic", "Nigeria",
                      "Ivory Coast", "Republic of Congo")
 
 # Vector indicating if the elections were general or not
-general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+general_elections <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 
 # Naming the general elections vector
-names(general_elections) = elections_africa
+names(general_elections) <- elections_africa
 general_elections
 
 ```
@@ -479,14 +481,14 @@ previous exercise, let's select the first and third value in the vector:
 
 ```{r selecting_vector_position, exercise=TRUE, exercise.lines = 17}
 # Vector of countries that held elections
-elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria",
+elections_africa <- c("Uganda", "Somalia", "Central African Republic", "Nigeria",
                      "Ivory Coast", "Republic of Congo")
 
 # Vector indicating if the elections were general or not
-general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+general_elections <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 
 # Naming the general elections vector
-names(general_elections) = elections_africa
+names(general_elections) <- elections_africa
 
 # Selecting the first value in a vector
 general_elections[1]
@@ -504,14 +506,14 @@ example, let's see if the elections in Uganda and Nigeria were general elections
 
 ```{r selecting_vector_name, exercise=TRUE, exercise.lines = 17}
 # Vector of countries that held elections
-elections_africa = c("Uganda", "Somalia", "Central African Republic", "Nigeria",
+elections_africa <- c("Uganda", "Somalia", "Central African Republic", "Nigeria",
                      "Ivory Coast", "Republic of Congo")
 
 # Vector indicating if the elections were general or not
-general_elections = c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+general_elections <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
 
 # Naming the general elections vector
-names(general_elections) = elections_africa
+names(general_elections) <- elections_africa
 
 # Selecting the value for Uganda
 general_elections["Uganda"]
@@ -521,7 +523,7 @@ general_elections["Nigeria"]
 
 ```
 
-## Topic 5: Grammar of R (Data frames)
+## Topic 4.3: Data frames
 Using only vectors to run complex analysis is inefficient. Thus, most of your 
 coursework will involve collection of vectors on the same topic. R stores 
 collections of vectors in several specific forms: matrices or data frames. 
@@ -535,7 +537,7 @@ A data frame is the most common way of storing information for analysis.
 Strictly speaking, it is a collection of vectors of equal length. Each vector 
 in a data frame usually represents a variable. The length of the vector then is 
 the number of rows, or observations. A data frame can consist of vectors
-representing different data types: numeric, character, factor, logical. Data 
+representing different data types: numeric, character, logical. Data 
 frames are essential for research. As an example, we will be working with a data 
 frame that has information on parliamentary elections in Europe for the past 20 
 years. 
@@ -571,7 +573,7 @@ data("party_name")
 data("left_right")
 data("seats")
 
-# Creating a data frames called elections_eu
+# Creating a data frames called elections
 elections <- data.frame(country_name, election_type,
                            election_date, vote_share,
                            party_name, left_right, 
@@ -586,8 +588,8 @@ head(elections)
 
 After creating a data frame, or importing it from another source, it is 
 important to understand how it looks. There are several functions that can help 
-with it. First of all, one can see how many rows and columns does a data frame 
-have with `dim()`, `nrow()`, `ncol()` functions. One can also look up the names 
+with it. First of all, one can see how many rows and columns a data frame 
+has with the `dim()`, `nrow()`, `ncol()` functions. One can also look up the names 
 of both rows and columns of a data frame with the help of `rownames()` and 
 `colnames()`. For example, let's investigate the cabinet data frame: 
 
@@ -838,7 +840,7 @@ quiz(
 
 **6. Adding information to a data frame**
 
-Once we can select values in a data frames, adding information becomes easy. 
+Once we can select values in data frames, adding information becomes easy. 
 Imagine, for example, that the number of seats for Australian elections in the 
 first 5 rows was recorded incorrectly. All the 5 first rows for that column 
 should have a value of 13. To replace the values, we need to combine all the
@@ -875,7 +877,7 @@ data("cabinet")
 
 ```
 
-**7. Adding Columns and rows, as well as renaming them**
+**7. Adding columns and rows, as well as renaming them**
 
 Let's start with renaming. There are special functions that help to name both 
 columns and rows: `colnames()`, `row.names()`. For both functions, we have to 
@@ -952,7 +954,7 @@ ncol(elections)
 
 ```
 
-Looks like it's 7. We therefore need to create a vector that has eight values.
+Looks like it's seven. We therefore need to create a vector that has eight values.
 This new vector is a fictional party in a fictional election. We then add that 
 vector to the elections data frame.
 
@@ -1086,7 +1088,7 @@ library(dplyr)
 
 ### The five main functions of dplyr: select(), filter(), arrange(), mutate(), summarize()
 
-**2.1: select() for columns**
+**7.1: select() for columns**
 
 The first of the functions we cover is `select()`. `select()` is a function that allows 
 us to select a variable from a data frame. This is an alternative to the 
@@ -1137,7 +1139,7 @@ data("cabinet")
 
 ```
 
-**2.2: filter() for rows**
+**7.2: filter() for rows**
 
 Now, `select()` is very useful for working with columns or variables of a 
 data frame. As you might remember from the earlier chapters, however, we 
@@ -1156,7 +1158,7 @@ data frame called `cabinets_2017`:
 
 ```{r dplyr5, exercise=TRUE, exercise.lines = 5}
 data("cabinet")
-# filtering for Germany
+# filtering for 2017
 cabinets_2017 <- filter(cabinet, year == 2017)
 head(cabinets_2017)
 ```
@@ -1190,7 +1192,7 @@ data("cabinet")
 
 ```
 
-**2.3: arrange()**
+**7.3: arrange()**
 
 One of the most simple functions in `dplyr` package is called arrange.
 It is a function that becomes extremely useful for cases when the data we work 
@@ -1207,8 +1209,8 @@ Let's name the subset data BG_subset.
 
 ```{r dplyr8, exercise=TRUE, exercise.lines = 7}
 data("cabinet")
-BG_subset <- filter(cabinet,country_name == "Bulgaria")
-BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
+BG_subset <- select(cabinet,country_name, year, party_name_english, seats)
+BG_subset <- filter(BG_subset,country_name == "Bulgaria")
 head(BG_subset)
 ```
 
@@ -1263,7 +1265,7 @@ BG_subset <- select(BG_subset,country_name, year, party_name_english, seats)
 arrange(BG_subset, party_name_english, year)
 ```
 
-**Exercise for `arrange()`
+**Exercise for `arrange()`**
 
 In the space below, filter the `cabinet` data for values of Germany only. Then
 select the variables: `column_name_english`, `year`, and `seats`. Name the
@@ -1278,7 +1280,7 @@ data("cabinet")
 
 ```
 
-**2.4: group_by() and summarize()**
+**7.4: group_by() and summarize()**
 
 The penultimate function we cover in this section is the `summarise()` from
 `dplyr`. This function is useful for deriving summary data for a data frame. 
@@ -1297,7 +1299,7 @@ data("cabinet")
 summarise(cabinet, mean(seats))
 ```
 
-While this is useful, you might wonder why one needs to use summarize in the 
+While this is useful, you might wonder why we need to use summarize in the 
 first place. Since, we could have calculated the mean for seats of the cabinet 
 data in a simpler way by simply including the seats column inside the `mean()` 
 function:
@@ -1412,7 +1414,7 @@ data("cabinet")
 ```
 
 
-**2.5: mutate() for creating new values**
+**7.5: mutate() for creating new values**
 
 Finally, we are covering the last function of the `dplyr` package within this
 module. The function is called `mutate()`. It is the only function in the
@@ -1494,7 +1496,8 @@ data("cabinet")
 
 Congratulations! If you made it until here, you have mastered foundational skills needed to work on data-related assignments. 
 
-## Topic 7.1: Advanced tidy: the pipe operator
+## Topic 8: Advanced tidy: the pipe operator
+
 This section is meant to be a breathing space where we get acquainted with a 
 new operator: **pipe operator**: `%>%`. The pipe operator is a special operator 
 that belongs to the `magrittr` package. The pipe operator is one of the tools that 
@@ -1578,7 +1581,7 @@ data("cabinet")
   
 ```
 
-## Topic 8: Import data into R
+## Topic 9: Import data into R
 Up to this point in this module, you have used datasets provided by us directly 
 to your working environment. When working with data tasks for your classes, 
 however, you will have to import various datasets. *Importing a dataset* means 
@@ -1602,7 +1605,7 @@ library(readxl)
 ```
 
 Now, both of these packages have multiple functions that let us import datasets
-in R. Why do we need multiple packages for doing this?. The reason is that datasets
+in R. Why do we need multiple packages for doing this? The reason is that datasets
 are stored in different formats. All of you have probably seen datasets in 
 Excel files. It is one way of storing rectangular data. Excel is not the only 
 format, however. In fact, there is a plethora of formats, such as
@@ -1626,14 +1629,14 @@ reading in data, such as `readr` and `readxl`. Now, we will cover two important
 functions from `readr` and from `readxl`. Most of data you will be working with 
 will come either in the **.csv** or **.xls** formats. 
 
-## Topic 9: Final thoughts
+## Topic 10: Final thoughts
 
 Updates of R and Rstudio are recommended to be done regularly 
 (RStudio will also remind you that it wants to be updated). Especially when working
 with others, it is important to first check that all team members have the same versions.
 Also, many packages require the most up-to-date version of R.
 
-There are many more thingsto learn about R, such as lists, merging datasets (e.g. with left_join),
+There are many more things to learn about R, such as lists, merging datasets (e.g. with left_join),
 creating functions, and much more! But you now should have the basic toolkit for
 working with R and learning about these things as you need them.
 
