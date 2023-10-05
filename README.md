@@ -8,7 +8,7 @@ To start the course, please follow these steps:
 1. Download R (https://cran.r-project.org/) and install it. Get the newest version that fits your operating system. You don't have to ever open R, just download it.
 2. Download RStudio (https://posit.co/download/rstudio-desktop/) and install it. Again, get the newest version that fits your operating system.
 3. Open RStudio.
-4. Install the package "devtools", which is needed for the course. After opening RStudio, copy the following code in the console and hit enter. The installation will take a while, during which there is a bunch of red text flashing through the console. Don't panic. It's fine.
+4. Install the package "devtools", which is needed for the course. After opening RStudio, copy the following code in the console and hit enter. The installation will take a while, during which there is a bunch of red text flashing through the console. Don't panic. It's fine. You might also be asked to update some packages (if you already had R installed previously). You can just to do that.
 ```
 install.packages("devtools")
 ```
