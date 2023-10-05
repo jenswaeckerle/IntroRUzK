@@ -169,7 +169,7 @@ Here is an example. You can run the code and then type `start_of_WWI` in the
 chunk and execute this line to see that you created this object (put the cursor 
 somewhere in the third line and hit Command+Enter on your keyboard).
 
-```{r start-WWI, exercise=TRUE, exercise.lines = 3}
+```{r start-WWI, exercise=TRUE, exercise.lines = 4}
 start_of_WWI <- 1914
 
 start_of_WWI
@@ -194,7 +194,7 @@ With the objects `start_of_WWI` and `end_of_WWI`, you can now calculate the
 length of World War I *without* having to create a new object using an 
 assignment operator (just as with an ordinary calculator). 
 
-```{r assign_diff, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
+```{r assign_diff, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 7}
 start_of_WWI <- 1914
 end_of_WWI <- 1918
 
@@ -211,7 +211,7 @@ when naming objects. Usually, you should only use:
 *If* you want to use a blank space in an object name, you can do it by putting 
 backticks (``) around the object name. Try to avoid this if you can.
 
-```{r object_w_blanks, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 3}
+```{r object_w_blanks, exercise = TRUE, exercise.setup = "end-WWI", exercise.lines = 8}
 start_of_WWI <- 1914
 end_of_WWI <- 1918
 
@@ -1078,7 +1078,7 @@ Let's start by installing and loading the package:
 
 ```{r dplyr1, eval = F,  exercise=TRUE, exercise.lines = 7}
 # install the package
-install.packages("dplyr")
+# install.packages("dplyr")
 
 # load the package 
 library(dplyr)
