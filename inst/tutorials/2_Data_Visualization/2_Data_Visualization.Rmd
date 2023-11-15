@@ -19,7 +19,7 @@ library(learnr)
 
 ## Introduction
 
-Welcome to Module 2 of the Curriculum 4.0 certificate course. This module will deal with all aspects of data visualization. We will show you the basics of ggplot2, the most common package for plotting things in R. 
+Welcome to Module 2 of the IntroRUzK course. This module will deal with all aspects of data visualization. We will show you the basics of ggplot2, the most common package for plotting things in R. 
 
 This course assumes that you already have basic knowledge of R, especially with regard to the following topics: Data structures (data frames, vectors, ...) and the tidyverse family (select, filter, summarize, ...). If you are not familiar with these topics, please start with or go back to the module "Introduction to R".
 
@@ -1016,6 +1016,6 @@ parl %>%
 
 ## Final Words
 
-That's it, you made it through module 2 of the IntrotoR. Congratulations! Please submit yur answers in the form below to get this course credited towards the certificate. If you want to come back to this course, you can just restart it or navigate back in the menu on the left. Remember, it is less about knowing it all by heart, but rather knowing where to find the information. It is totally fine to come back to this course to copy-paste some command if you need it!
+That's it, you made it through module 2 of the IntroRUzK course. Congratulations! Please submit yur answers in the form below to get this course credited towards the certificate. If you want to come back to this course, you can just restart it or navigate back in the menu on the left. Remember, it is less about knowing it all by heart, but rather knowing where to find the information. It is totally fine to come back to this course to copy-paste some command if you need it!
 
 We hope you enjoyed the course and learned something in the process.
