@@ -1,0 +1,1021 @@
+---
+title: "Data Visualization for R for University of Cologne Political Science"
+author: "Ayjeren R. Bekmuratovna, Ingo Rohlfing, Jens Wäckerle"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: University of Cologne Political Science Introduction to R (Chapter 2, Data Visualization).
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(tutorial.storage = list(
+  save_object = function(...) { },
+  get_object = function(...) NULL,
+  get_objects = function(...) list(),
+  remove_all_objects = function(...) { }
+))
+library(learnr)
+```
+
+## Introduction
+
+Welcome to Module 2 of the Curriculum 4.0 certificate course. This module will deal with all aspects of data visualization. We will show you the basics of ggplot2, the most common package for plotting things in R. 
+
+This course assumes that you already have basic knowledge of R, especially with regard to the following topics: Data structures (data frames, vectors, ...) and the tidyverse family (select, filter, summarise, ...). If you are not familiar with these topics, please start with or go back to the module "Introduction to R".
+
+Some practical tips: You can repeat this and other modules as often as you like. It is completely allowed (even encouraged) to copy-paste code from this module and adapt to whatever you want to do, don't start from scratch in a new project. If you are stuck trying to get R to do something, check whether someone online has already posted an answer (for example on stackexchange). 
+
+## Introduction to ggplot2
+
+ggplot is the most common package for visualizations. It is especially useful, because it allows the use to change almost everything about a plot. We will learn about many of these options below, step-by-step. On a basic level, ggplot needs two things from you: data and geoms. Data is commonly added in the shape of a dataset with cases in the rows and variables of interest in the columns. We define which variables we use in the plot using the "aes" command. Then, we add geoms, which control the way the data is shown in the graph. These could be bars in a barplot, points in a scatterplot or words in a scatterplot where you display the names of items directly.
+
+Beyond that, there is a myriad of other options to add to your plot, there are almost limitless ways to customize plots in ggplot2. The most common are to modify the scales used (for example by giving them sensible names) and adding a theme (to make the plot more pleasant to read). 
+
+## Barplots: Parties in the ParlGov dataset
+
+We might be interested in the kind of parties that exist in Europe. Are there more conservative or more social democrat parties? One easy way to get that information is to use the table function. Create a table of the party families (variable "family_name") in the dataset "parties".
+
+```{r table_parties, exercise=TRUE, exercise.lines = 6}
+data("parties")
+data("parl")
+
+
+
+```
+
+
+In a report or paper, we might want to show this information in a plot, which presents all relevant information much more concise. Below, you can see a very simple barplot. As you can see, it only needs the "data" defined (here: "parties") and a variable (defined by "aes", here "family_name"). What kind of geom will be used is defined in the line below: We want a bar chart, therefore we use "geom_bar()". Throughout the module, we will use a wide range of other kinds of geoms, such as line plots and scatterplots. The plot itself shows how often each party family comes up in the ParlGov dataset. Note that ggplot calculates the sum that you displayed in the table above on its own.
+
+```{r plot1.1}
+data("parties")
+library(tidyverse)
+ggplot(data=parties,aes(y=family_name))+
+  geom_bar()
+```
+
+However, this is still not very clear, we have to figure out which party family is the most or least frequent by comparing bars. It would be preferable to have them ordered right away. There are several ways of doing this, but the easiest is to use "fct_infreq" around the variable you want to plot, this automatically orders the plot according to frequency. Also, we flip the order of party families by using "fct_rev" to plot the largest party family first.
+
+```{r plot1.2}
+parties %>% 
+  mutate(family_name_rec = fct_rev(fct_infreq(family_name))) %>% 
+  ggplot(aes(y=family_name_rec))+
+  geom_bar()
+```
+
+We now have a plot that gives all the information we need, but it could look much nicer. First, we add the "labs" command to modify the labels of the axes. Note that we add this with the "+" sign after the geom_bar() command to build the plot step-by-step. It is advisable to always start a new line when adding one of these additional commands. In "labs", we can define the name of the x-axis, the y-axis, and, if you want, the title of the plot. Here, we add a nicer description of the variable on the x-axis and leave the y-axis blank, as it should be quite obvious what these categories are. Second, we add the theme "theme_bw()". There are several pre-set themes that are designed to make the plot look nicer in a single command, such as theme_bw() and theme_minimal(). theme_bw() for example changes the background to white and creates a border around the plot. We will get back to making the plots look even nicer towards the end of the module.
+
+```{r plot1.3}
+parties %>% 
+  mutate(family_name_rec = fct_rev(fct_infreq(family_name))) %>% 
+  ggplot(aes(y=family_name_rec))+
+  geom_bar()+
+  labs(x="Number of Parties in the Dataset",
+       y="")+
+  theme_bw()
+```
+
+So far, we have looked at absolute numbers only. However, the fact that we have 82 green parties in the dataset doesn't tell us much, it would be much more interesting to know the share of parties that belong to that family. In ggplot2, we can do that with two changes: We add an argument to the aes command in which we specify to take the share instead of the absolute number of observations ("x = (..count..)/sum(..count..)"). We also add the scale argument "scale_x_continuous(labels = percent)". All this does is to show the x-axis as percentages instead of shares. To use this last argument, we need to load the "scales" package before.
+
+```{r plot1.4}
+library(scales)
+parties %>% 
+  mutate(family_name_rec = fct_rev(fct_infreq(family_name))) %>% 
+  ggplot(aes(y=family_name_rec,x = (..count..)/sum(..count..)))+
+  geom_bar()+
+  scale_x_continuous(labels = percent) +
+  labs(x="Share of Parties in the Dataset",
+       y="")+
+  theme_bw()
+```
+
+Let's make these plots look even more appealing. First, we can add color to the plot. This is done very easily by adding the command "fill=family_name_rec" to the aes() line. R then gives each of the party families a different color, which results in the plot below. We will learn how to make this look even better later, but for now this should suffice.
+
+```{r plot1.5}
+parties %>% 
+  mutate(family_name_rec = fct_rev(fct_infreq(family_name))) %>% 
+  ggplot(aes(y=family_name_rec,fill=family_name_rec))+
+  geom_bar()+
+  labs(x="Number of Parties in the Dataset",
+       y="")+
+  theme_bw()
+```
+
+A next step might be to look at the parties within country. This is a good way to show more information at the same time: You do not only know which party families are more prevalent overall, but also in which countries, using the same amount of space! For this, we first subset the data to only some countries (in order to not overcrowd the plot), using the "filter" argument, which you should be familiar with. We then delete uncoded parties, again with the filter argument. Instead of coloring the bars by party family as in the previous plot, we now color them by country (variable: country_name). We then add "position="dodge"" to the geom_bar argument to tell R it should show the bars for all the countries next to each other. We can see that France has more conservative parties than the others, Italy has more Christian Democratic parties, and Germany more right-wing parties. 
+
+```{r plot1.6}
+parties %>% 
+  filter(country_name %in% c("Germany","France","Italy","United Kingdom")) %>% 
+  filter(!family_name %in% c("no family","to be coded")) %>% 
+  mutate(family_name_rec = fct_rev(fct_infreq(family_name))) %>% 
+  ggplot(aes(y=family_name_rec,fill=country_name))+
+  geom_bar(position="dodge")+
+  labs(x="Number of Parties in the Dataset",
+       y="")+
+  theme_bw()
+```
+
+
+Now try this yourself. Make a plot of the countries in the dataset (the variable is "country_name") and add correct axes. Also, try out theme_bw, as well as other themes (for an overview of preset themes see here: https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+```{r excercise_1, exercise=TRUE, exercise.lines = 7}
+
+```
+
+## Quiz 1
+
+We would now like to ask you some questions to recap barplots. 
+
+```{r quiz1, echo=FALSE}
+quiz(
+  question("What is the correct geom in ggplot if you want to plot how often each unique element is in a variable?",
+    answer("geom_bar",correct = TRUE),
+    answer("geom_line"),
+    answer("geom_plot"),
+    answer("geom_unique")
+  ),
+  question("What command orders the levels in a factor according to their frequency?",
+    answer("fct_sort"),
+    answer("factor"),
+    answer("fct_infreq", correct = TRUE),
+    answer("order_factor")
+  ),
+  question("What command orders the levels in a factor according to their frequency?",
+    answer("fct_sort"),
+    answer("factor"),
+    answer("fct_infreq", correct = TRUE),
+    answer("order_factor")
+  )
+)
+```
+
+
+## Column Plots: Vote Shares in the 2017 German Election
+
+The plots in Chapter 1 provide an overview of many observations and you use them in a similar way as the table function in R. However, often we are not interested in the frequency of counts in a variable (e.g. how many social democratic parties there are or how many German countries there are in the dataset), but rather in the values the observations take themselves. We might want to visualize the duration of presidential terms, the age of politicians or the vote share different parties got in an election. In other words, while we were visualizing the counts of categorical variables before, we now directly plot the values in a numeric variable. 
+
+Our first plot will show the vote shares of German parties in the 2017 election. For this, we use a different dataset from ParlGov: elections, which has one observation for each election result for a party. We first subset the dataset to the election and then plot it with ggplot. Note that we now use the "geom_col" geom, rather than "geom_bar".
+
+```{r plot2.1}
+data("parl")
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  ggplot(aes(x=vote_share,y=party_name))+
+  geom_col()
+```
+
+Again, we want this plot to look better. So we introduce the correct axis labels and set a theme. Then we reorder the parties from largest to smallest. This time, we use the "reorder" command, because, we want to reorder one variable (party_name) according to the values of another (vote_share). We therefore temporarily create a new variable ("parties_ordered") using the "mutate" command and then use this variable in "aes".
+
+```{r plot2.2}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="")+
+  theme_bw()
+```
+
+Finally, we introduce another aesthetic: "geom_vline". It simply adds a vertical line (hence vline) to the plot, at the location that you specify with "xintercept". Here, we set a vertical line at the value five, as that is the vote share a party has to achieve to enter parliament. To make this a dashed rather than a solid line, we write "lty="dashed", where "lty" stands for linetype.
+
+```{r plot2.3}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="")+
+  theme_bw()+
+  geom_vline(xintercept=5,lty="dashed")
+```
+
+Instead of using bars, we can also create a plot with a dot at the vote share a party achieved and a line that goes up to that point. This chart is also often called a "lollipop" chart. To achieve this, we combine the geoms geom_point(), which creates a point, and geom_segment(), which creates a line. geom_segment() needs four points: a starting point on the x-axis (denoted "x"), an end point on the x-axis ("xend"), a starting point on the y-axis ("y") and an end point on the y-axis ("yend"). We want the lines to be horizontal (so y and yend are the same) and go from 0 to whatever vote share the party got (x=0 and xend=vote_share).
+
+```{r plot2.4}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered))+
+  geom_segment( aes(y=parties_ordered, yend=parties_ordered, x=0, xend=vote_share), color="grey") +
+  geom_point( color="red", size=4) +
+  labs(x="Vote Share",
+       y="")+
+  theme_bw()+
+  geom_vline(xintercept=5,lty="dashed")
+```
+
+Now try this yourself. Make a similar plot for the 2019 Danish general election on 5 June 2019. Note that the electoral threshold in Denmark is 2%, so you have to move the vertical line to the left. Try making a barplot first, then a plot with points and line segments.
+
+```{r excercise_2, exercise=TRUE, exercise.lines = 7}
+
+```
+
+## Quiz 2
+
+Some questions on column plots:
+
+```{r quiz2, echo=FALSE}
+quiz(
+  question("What is the correct geom in ggplot if you want to plot what values a variable has directly?",
+    answer("geom_bar"),
+    answer("geom_line"),
+    answer("geom_col",correct = TRUE),
+    answer("geom_vals")
+  ),
+  question("What command adds a vertical line to the plot at x-axis position 11?",
+    answer("geom_vline(yintercept=11)"),
+    answer("geom_vline(xintercept=11)", correct = TRUE),
+    answer("geom_hline(yintercept=11)"),
+    answer("geom_hline(xintercept=11)")
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("We can change how a line looks by adding 'line='dashed' to the command.",correct=TRUE),
+    answer("We can add a horizontal line to a plot for a defined segment using geom_segment."),
+    answer("We can change the color of all points in the graph using color='red'")
+  )
+)
+```
+
+## Distributions: Histogram and Density
+
+So far, we have plotted the distribution of nominal variables, or discrete categories. However, many variables in datasets contain numerical values, on ordinal or interval scales. These might include the vote share of a party, the number of female MPs from a party or the left-right position of a party. For a small number of such observations, we can use a barplot or a dotplot as we saw before when we plotted the results from the German election in 2017. However, most datasets have more observations than are easy to display in such a way. Additionally, we are often interested in how a variable is distributed overall, rather than which specific case has which value. In this chapter, we will learn about different ways to do this, starting with a simple histogram. In the plot below, we have used the geom_histogram function to plot the left-right distribution of parties in the dataset. On the x-axis you can see the left-right scale, on the y-axis the number of parties in each category. There are several values that have many more observations than others. This is due to many parties being assigned a round number as the position.
+
+```{r plot3.1}
+parties %>% 
+  filter(!is.na(left_right)) %>% 
+  ggplot(aes(x=left_right))+
+  geom_histogram()+
+  labs(x="Left-Right Distribution of Parties")+
+  theme_bw()
+```
+
+If we don't supply a specific number for the width or number of bars, geom_histogram will pick one for us. In the plot above, it divided the scale into 30 bins. That means that the first bar counts all observations between 0 and 0.33, the second every observation between 0.33 and 0.66, and so on. We can change this by specifying "binwidth" in the "geom_histogram" geom, as seen below. Here we choose a binwidth of 1, resulting in 11 bars (0 to 10). Now, this plot shows us that the most common position for parties on the left-right dimension is actually slightly right of centre, around a value of six. Both extremes are the most uncommon positions.
+
+```{r plot3.2}
+parties %>% 
+  filter(!is.na(left_right)) %>% 
+  ggplot(aes(x=left_right))+
+  geom_histogram(binwidth = 1)+
+  labs(x="Left-Right Distribution of Parties")+
+  theme_bw()
+```
+
+Instead of bars, we can display the same information as a density distribution using the geom "geom_density". This doesn't assume cuts between the bins, but rather displays a smooth density plot over the range of the variable.
+
+```{r plot3.3}
+parties %>% 
+  filter(!is.na(left_right)) %>% 
+  ggplot(aes(x=left_right))+
+  geom_density()+
+  labs(x="Left-Right Distribution of Parties")+
+  theme_bw()
+```
+
+We can plot both pieces of information in one plot, combining histogram and density. We need to set "y=..density.." in the "geom_histogram" argument to display the share of observations, rather than the absolute number. Histogram and density are then on the same scale (0 to 1). We also add the argument "alpha=0.25" to the histogram, which decreases the saturation of color in the histogram bars and allows us to see the density line behind.
+
+```{r plot3.4}
+parties %>% 
+  filter(!is.na(left_right)) %>% 
+  ggplot(aes(x=left_right))+
+  geom_density()+
+  geom_histogram(aes(y=..density..),binwidth = 1,alpha=0.25)+
+  labs(x="Left-Right Distribution of Parties")+
+  theme_bw()
+```
+
+We can display the distribution of a variable within subgroups with the ggridges package. This package provides us with the "geom_density_ridges" argument, which plots distributions of a variable within subgroups in a three-dimensional perspective (like ridges in a mountain range, hence the name). Below, we can see the left-right distribution of parties in the dataset within the party families. As expected, right-wing, conservative and christian-democratic parties are the most to the right, while communist, green and social democratic parties are the furthest to the left. Special issue parties have a wide range of ideological positions, as they are defined by specific policy areas, such as regional interests rather than their left-right position. We order the party families using the reorder command and display the mean of each distribution with the commands  "quantile_lines = T, quantiles = 2".
+
+```{r plot3.5}
+library(ggridges)
+parties %>% 
+  filter(!is.na(left_right)) %>% 
+  ggplot(aes(x=left_right,y=reorder(family_name,left_right)))+
+  geom_density_ridges(quantile_lines = T, quantiles = 2)+
+  labs(x="Left-Right Distribution of Parties",
+       y="")+
+  theme_bw()
+```
+
+## Quiz 3
+
+Let's recap how we can plot histograms and densities.
+
+```{r quiz3, echo=FALSE}
+quiz(
+  question("What is the best geom in ggplot if you want to plot the overall distribution of a variable using bars?",
+    answer("geom_bar"),
+    answer("geom_histogram",correct = TRUE),
+    answer("geom_density"),
+    answer("geom_distr")
+  ),
+  question("Which type of variable is best displayed as a histogram or density plot?",
+    answer("A nominal variable"),
+    answer("An interval variable", correct = TRUE),
+    answer("A variable with very few observations."),
+    answer("A variable with few distinct categories.")
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("We can change the number of bars in a histogram using 'binwidth=1'"),
+    answer("We can use geom_density and geom_histogram in the same plot."),
+    answer("The geom_density_ridges geom lines up multiple density distributions from left to right.",correct=TRUE)
+  )
+)
+```
+
+## Boxplots and Violin Plots
+
+Plotting distributions as in the preceding chapter is one way of displaying a continuous variable. Another is to plot certain summary statistics, for example in a boxplot. Boxplots (as displayed below) show multiple pieces of information at once: The rectangular box shows the first and third quartiles of the distribution of the variable (25th and 75th percentile). The black line within the box denotes the median. On both sides of the boxes, we see a line, called whisker, which extends to either the minimum and maximum of the distribution or to 1.5 times the interquartile range (the distance between the first and third quartile), whichever is smaller. In the graph below, the whisker on the left of the box always extends to zero, because the plot shows vote shares of parties and there are many small parties clustered just above zero. The points beyond the whiskers are called outliers and are plotted individually. For example, in Latvia one party has a vote share of more than 60%. Boxplots can be created through "geom_boxplot".
+
+```{r plot4.1}
+parl %>% 
+  filter(!is.na(vote_share)) %>% 
+  filter(country_name %in% c("United Kingdom","Sweden","Lithuania","Latvia","Estonia","Spain")) %>% 
+  filter(election_date > "1990-01-01") %>% 
+  ggplot(aes(x = vote_share, y = country_name)) +
+  geom_boxplot()+
+  labs(x="Vote Share of Parties",
+       y="")+
+  theme_bw()
+```
+
+One other way to display the same information is through violin plots, added through "geom_violin". These plots are quite similar to the density plots we saw before, but add some elements of boxplots. For instance, it is straightforward to add quantiles with the option "draw_quantiles = c(0.25, 0.5, 0.75)", such as seen in the plot below. 
+
+
+```{r plot4.2}
+parl %>% 
+  filter(!is.na(vote_share)) %>% 
+  filter(country_name %in% c("United Kingdom","Sweden","Lithuania","Latvia","Estonia","Spain")) %>% 
+  filter(election_date > "1990-01-01") %>% 
+  ggplot(aes(x = vote_share, y = country_name)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))+ 
+  labs(x="Left-Right Distribution of Parties",
+       y="")+
+  theme_bw()
+```
+
+## Quiz 4
+
+Let's recap how we can do boxplots and violin plots.
+
+```{r quiz4, echo=FALSE}
+quiz(
+  question("Which of the following is NOT displayed in a default boxplot?",
+    answer("The median of the distribution."),
+    answer("The first and third quartile of the distribution."),
+    answer("The mean of the distribution.",correct = TRUE),
+    answer("Whiskers extending to the edge of the distribution.")
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("Violin plots are just histograms that also include some elements of boxplots.",correct=TRUE),
+    answer("We can use the command 'draw_quantiles' to add quantiles to a violin plot."),
+    answer("Boxplots can be created for each of the levels of a categorical variable in order to compare their distributions.")
+  )
+)
+```
+
+## Displaying Counts
+
+If we want to display the joint frequency of two categorical variables (similar to a crosstable), we can simply use "geom_point()". However, as you can see below, there are many points directly on top of each other and it is impossible to tell whether there are more Estonian special issue parties or Latvian right-wing parties.
+
+```{r plot5.1}
+parl %>% 
+    filter(country_name %in% c("United Kingdom","Sweden","Lithuania","Latvia","Estonia","Spain")) %>% 
+    filter(election_date > "1990-01-01") %>% 
+  left_join(parties %>% 
+              select(party_id,family_name)) %>% 
+  ggplot(aes(y = family_name, x = country_name)) +
+  geom_point()+ 
+  labs(x="",
+       y="")+
+  theme_bw()
+```
+
+While all points in the same combination of categories (for example all Agrarian parties from Latvia) would be plotted on top of each other when using "geom_point" here, "geom_jitter" randomly moves each single point horizontally and vertically. The degree to which points are jittered is controlled via the "width" and "height" options. In the plot below you can now see that there are many more liberal parties in Lithuania and special issue parties in Spain than communist parties in Latvia.
+
+```{r plot5.2}
+parl %>% 
+    filter(country_name %in% c("United Kingdom","Sweden","Lithuania","Latvia","Estonia","Spain")) %>% 
+    filter(election_date > "1990-01-01") %>% 
+  left_join(parties %>% 
+              select(party_id,family_name)) %>% 
+  ggplot(aes(y = family_name, x = country_name)) +
+  geom_jitter(width = 0.2,height=0.2)+ 
+  labs(x="",
+       y="")+
+  theme_bw()
+```
+
+A more tidy approach to the same data is to use the "geom_count()" geom, which creates one point per combination of categories with sizes increasing by how many cases correspond to each. 
+
+```{r plot5.3}
+parl %>% 
+    filter(country_name %in% c("United Kingdom","Sweden","Lithuania","Latvia","Estonia","Spain")) %>% 
+    filter(election_date > "1990-01-01") %>% 
+  left_join(parties %>% 
+              select(party_id,family_name)) %>% 
+  ggplot(aes(y = family_name, x = country_name)) +
+  geom_count()+ 
+  labs(x="",
+       y="")+
+  theme_bw()
+```
+
+Instead of counting cases, we can also display the sum of vote shares of parties in the party families. To achieve that, we first have to subset and summarise the data a little. First, we filter by country as before, then filter only parliamentary elections. We then group_by country and filter the last election in each country in the dataset. We then exclude all parties whose vote share isn't recorded in the dataset and join the party information (to get to the party family). We then group by country and family_name and sum up the data on that level. This now gives us a data frame with the sum of vote share for each party family in each of the countries. 
+
+We plot that vote share using the "geom_tile()" geom. With the command "scale_fill_gradient", we can modify the color range (we choose white to red).
+
+```{r plot5.4}
+parl %>% 
+  filter(country_name %in% c("United Kingdom","Sweden","Germany","Latvia","Estonia","Spain")) %>% 
+  filter(election_type == "parliament") %>% 
+  group_by(country_name) %>% 
+  filter(election_date == max(election_date)) %>% 
+  filter(!is.na(vote_share)) %>% 
+  left_join(parties %>% 
+              select(party_id,family_name)) %>% 
+  group_by(country_name,family_name) %>% 
+  summarise(sum_vote_share = sum(vote_share)) %>% 
+  ggplot(aes(y = family_name, x = country_name, fill=sum_vote_share)) +
+  geom_tile()+ 
+  labs(x="",
+       y="")+
+  scale_fill_gradient(low="white", high="red") +
+  theme_bw()
+```
+
+## Quiz 5
+
+Let's recap how we can plot counts.
+
+```{r quiz5, echo=FALSE}
+quiz(
+  question("What is the geom in ggplot if you want to slightly move the points in a plot to reveal if they lay on top of each other?",
+    answer("geom_jiggle"),
+    answer("geom_jitter",correct = TRUE),
+    answer("geom_move"),
+    answer("geom_point_jitter")
+  ),
+  question("What type of information is commonly plotted using geom_tile?",
+    answer("Counts of observations."),
+    answer("The share of observations that are TRUE"),
+    answer("The colors saved in a categorical variable."),
+    answer("The value of an interval variable for a number of cases.", correct = TRUE)
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("The geom 'geom_count' will display points with sizes according to the value of the variable."),
+    answer("We can plot the co-occurence of two variables such as country and party family using 'geom_point'."),
+    answer("In geom_tile, red always denotes higher values, while blue denotes lower values.",correct=TRUE)
+  )
+)
+```
+
+## Scatterplots
+
+One of the most common types of plots are scatterplots, or plots of two interval variables against each other. One of the reasons this kind of plot is common is that you cannot easily sum up this data in a cross table since there are many possible combinations of values. Once plotted, one can identify clusters or even a possible relationship. Below, we see the easiest possible scatterplot of all parties in the parlgov dataset using the "geom_point" geom: On the x-axis you see the state vs market dimension, on the y-axis the liberty vs authority dimension. Each point is a party. Parties in the upper right quadrant are culturally and economically right, bottom left are culturally and economically left parties.
+
+```{r plot6.1}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority))+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+Instead of points, we can also plot labels directly. Below, we subset the data to Germany, choose the major parties and use the "geom_label" geom to display the short form of the party labels. Note that we now need to specify the "label" in aes, in addition to the x and y position. CDU, CSU and AfD are on the right culturally and economically, while the FDP is on the left culturally and on the right economically. The other parties are located in the lower left quadrant.
+
+```{r plot6.2}
+parties %>% 
+  filter(country_name=="Germany") %>% 
+  filter(party_name_short %in% c("AfD","B90/Gru","CDU","CSU","FDP","PDS|Li","SPD")) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority,label=party_name_short))+
+  geom_label()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+Plotting labels can be extremely useful to display information. However, when the number of observations increases, overlaps between labels get very likely. We can avoid overlaps using the "geom_label_repel()" command from the ggrepel package. For the plot below, we first select parties from Austria, Germany and the Czech Republic, then we join the most recent election result and filter to keep only parties that achieved five percent of the vote. In the plot we can see that the parties from the same party family in different countries are close together: SPO (Austria) and SPD (Germany) are located in the centre left, Gruene (Austria) and B90/Gru (Germany) on the cultural left and FDP (Germany) and ODS (Czech Republic) on the cultural left and economic right.
+
+```{r plot6.3}
+library(ggrepel)
+parties %>% 
+  filter(country_name%in%c("Austria","Germany","Czech Republic")) %>% 
+  filter(!is.na(party_name_short)) %>% 
+  left_join(parl %>% 
+              group_by(country_name) %>% 
+              filter(election_date == max(election_date)) %>% 
+              select(party_id,vote_share)) %>% 
+  filter(vote_share>5) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority,label=party_name_short,color=country_name))+
+  geom_label_repel()+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+As mentioned before, scatterplots can be used to visualize a relationship between two variables. One way to show this relationship is to use the "geom_smooth()" geom which estimates a smoothed relationship, indicated below with the blue line. We add this on top of "geom_point" and overlay the two geoms. The shaded area around the line denotes the local 95% confidence interval. As the plot below shows, the parties that are the most right-wing on the cultural dimension are those in the centre on the economic dimension. 
+
+```{r plot6.4}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority))+
+  geom_smooth()+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+While this very flexible form of geom_smooth is useful for finding patterns in data, we can also predefine a structural form of relationship. For example, we might theoretically assume a linear relationship between the two scales, where parties that economically more right are also culturally more right. We can specify the form of "geom_smooth" using the "method='lm'" option. We then indeed find a positive correlation between the two variables, albeit with a lot of divergent cases.
+
+```{r plot6.5}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority))+
+  geom_smooth(method="lm")+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+Try for yourself: Visualize the relationship between the left-right position and the EU position (eu_anti_pro). 
+
+```{r excercise_3, exercise=TRUE, exercise.lines = 7}
+
+```
+
+While we were displaying all parties at once in the previous plots, we can also color the parties by party family. It is reasonable to expect there to be some clustering of party families: Right-wing parties should be on the right on both dimensions, whereas liberal parties should be on the economic right and cultural left. We can add this aspect by adding "color=family_name" to the ggplot command. As we see below, the party families are colored accordingly and the positioning of parties largely corresponds to our expectations.
+
+```{r plot6.6}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  filter(family_name%in%c("Christian Democracy","Communist/Socialist","Green/Ecologist","Liberal","Right-wing","Social democracy")) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority,color=family_name))+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+In addition to adding colors based on categories such as party family, we can do the same with shapes. As can be seen below, the addition of "shape=family_name" assigns a different shape to each party family. This is also useful for producing black-and-white plots. Note that there is a limited number of shapes available, so we subset the data to only include some party families.
+
+```{r plot6.7}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  filter(family_name%in%c("Christian Democracy","Communist/Socialist","Green/Ecologist","Liberal","Right-wing","Social democracy")) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority,shape=family_name,color=family_name))+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+One alternative to plotting all data points as before is to summarize the information before plotting. One way to do that is to first use the "group_by" and "summarise" commands to calculate the mean within each party family on both variables. We then plot the summarised data and color the data points as before. We can now see a more clear picture of where the party families are situated. 
+
+```{r plot6.8}
+parties %>% 
+  filter(!is.na(state_market)) %>% 
+  group_by(family_name) %>% 
+  summarise(state_market = mean(state_market),
+            liberty_authority = mean(liberty_authority)) %>% 
+  ggplot(aes(x=state_market,y=liberty_authority,color=family_name))+
+  geom_point(size=4)+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()
+```
+
+While this summarised plot is helpfully concise, it masks the variation within each group. Instead of coloring all observations in a group, we can also separate them completely and put all observations in each group in their own plot. We can do this using the "facet_wrap(~family_name)" command, which creates one plot for each party family. It also keeps the axes stable, so you can see the groups of partys in relation to each other. You can adjust the number of rows and/or coloumns using the "nrow" and "ncol" commands.
+
+```{r plot6.9}
+parties %>% 
+  filter(!is.na(state_market)&family_name!="to be coded") %>% 
+  ggplot(aes(x=state_market,y=liberty_authority))+
+  geom_point()+
+  labs(x="State versus Market",
+       y="Liberty vs Authority")+
+  theme_bw()+
+  facet_wrap(~family_name,nrow = 3)
+```
+
+## Quiz 6
+
+Let's recap how we can plot counts.
+
+```{r quiz6, echo=FALSE}
+quiz(
+  question("What is the geom in ggplot if you want to directly plot a label?",
+    answer("geom_label",correct = TRUE),
+    answer("geom_sign"),
+    answer("geom_point"),
+    answer("geom_letters")
+  ),
+  question("What happens when we include 'facet_wrap()' in a plot?",
+    answer("The variables in the plot are scaled from zero to one."),
+    answer("The axes of the plot are switched."),
+    answer("We wrap the plot in a nicer theme."),
+    answer("We create subplots for each category in the faceting variable.", correct = TRUE)
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("We can use geom_label_repel to avoid overlapping labels."),
+    answer("We can plot the co-occurence of two variables such as country and party family using 'geom_point'."),
+    answer("In geom_tile, red always denotes higher values, while blue denotes lower values.",correct=TRUE)
+  )
+)
+```
+
+## Line Plots
+
+If we want to plot the value of a variable in relation to another variable (for example time), we can use the "geom_line" command. In the plot below, you can see the vote share of the German party SPD since 1919 with the year on the x-axis and the vote share in each election on the y-axis. For this, we use the "geom_line" geom
+
+```{r plot7.1}
+parl %>% 
+  filter(country_name=="Germany") %>% 
+  filter(party_name_short=="SPD") %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share))+
+  geom_line()+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+We can also plot the vote share of more than one party at once. If we do so, we need to specify a grouping variable (e.g. through "color"), so ggplot plots one line per party.
+
+```{r plot7.2}
+parl %>% 
+  filter(country_name=="Germany") %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  filter(party_name_short %in% c("AfD","B90/Gru","CDU","SPD","FDP","PDS|Li")) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share,color=party_name_short))+
+  geom_line()+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+We can change the labeling on the x-axis through the "scale_x_date" command. Below, we set it to a distance of 8 years, which is roughly equivalent to two parliamentary terms.
+
+```{r plot7.3}
+parl %>% 
+  filter(country_name=="Germany") %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  filter(party_name_short %in% c("AfD","B90/Gru","CDU","SPD","FDP","PDS|Li")) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share,color=party_name_short))+
+  geom_line()+
+  scale_x_date(date_breaks = "8 years",date_labels="%Y")+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+Instead of grouping observations with the "color" command, we can also use the "lty" option, which plots each line with a different linetype. This is useful for producing black-and-white plots.
+
+```{r plot7.4}
+parl %>% 
+  filter(country_name=="Germany") %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  filter(party_name_short %in% c("CDU","SPD")) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share,lty=party_name_short))+
+  geom_line()+
+  scale_x_date(date_breaks = "8 years",date_labels="%Y")+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+Try for yourself: Visualize the vote share of Italian parties over time in a similar manner, but split the plot into subplots for each party using "theme_bw". 
+
+```{r excercise_4, exercise=TRUE, exercise.lines = 7}
+
+```
+
+## Quiz 7
+
+Let's recap how we can plot lines.
+
+```{r quiz7, echo=FALSE}
+quiz(
+  question("Which of the following cannot be used to draw one line per variable value?",
+    answer("color"),
+    answer("lty"),
+    answer("split",correct = TRUE),
+    answer("group")
+  ),
+  question("",
+    answer("The variables in the plot are scaled from zero to one."),
+    answer("The axes of the plot are switched."),
+    answer("We wrap the plot in a nicer theme."),
+    answer("We create subplots for each category in the faceting variable.", correct = TRUE)
+  ),
+  question("Which of the following statements is NOT correct?",
+    answer("We can change the scale of the x-axis to show years using 'scale_x_date'"),
+    answer("The geom 'geom_line()' draws a line connecting all points."),
+    answer("The geon 'geom_line()' always draws a timeline from left to right on the x-axis.",correct=TRUE)
+  )
+)
+```
+
+## Global vs Local Mapping
+
+We can overlay data on top of each other, when we want to both show the underlying distribution of all cases and focus the attention on a smaller number of cases or a summary statistic that are more important to the argument at hand. We did something similar before already when we added a "geom_smooth" to a "geom_point" geom. In the example below, we show a trend over time (using "geom_smooth") and also the underlying data points with "geom_point", shaded to not clutter the plot too much (by adding "alpha=0.15" to the "geom_point" command). The difference to the plots before is that we now control the options separately for the points and the smooth: The points are all shaded and the smooth is colored by party.
+
+```{r plot8.1}
+parl %>% 
+  filter(country_name=="Denmark") %>% 
+  filter(!is.na(vote_share)) %>% 
+  filter(party_name_short%in%c("V","Sd","DF","KF")) %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share))+
+  geom_point(alpha=0.15)+
+  geom_smooth(aes(color=party_name_short))+
+  scale_x_date(date_breaks = "10 years",date_labels="%Y")+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+We can also make some points we care about stand out from the rest. Before creating the plot, we create a subset of the data with only the data points that are important for the plot, in this example the election results of the Social Democrats of Denmark. Then, we plot all results of parties in Denmark as faded out points and plot our previously saved data of the Social Democrats in a second geom_point command. There, we assign all points of the Social Democrats the color "#CD082C", which is the hex color code for the Danish Social Democrats.
+
+```{r plot8.2}
+
+parl_den_sd <- parl %>% 
+  filter(country_name=="Denmark") %>%
+  filter(!is.na(vote_share)) %>% 
+  filter(party_name=="Socialdemokraterne") %>% 
+  mutate(date_recoded = as.Date(election_date))
+
+parl %>% 
+  filter(country_name=="Denmark") %>% 
+  filter(!is.na(vote_share)) %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share))+
+  geom_point(alpha=0.15)+
+  geom_point(data=parl_den_sd,aes(x=date_recoded,y=vote_share),color="#CD082C")+
+  scale_x_date(date_breaks = "10 years",date_labels="%Y")+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+
+Using the same approach, we can also selectively label data points. We try this by plotting the election results in 2001 and 1975 in Denmark. For this, we first create a dataset of the results we want plotted (all observations in 1975 and 2001). We then create the faded points of all election results in Denmark of parties that receive more that 3% of the votes, the points of the parties in the two elections and labels for these parties.
+
+```{r plot8.3}
+
+parl_den_2001 <- parl %>% 
+  filter(country_name=="Denmark") %>% 
+  filter(!is.na(vote_share)&vote_share>3) %>% 
+  filter(election_date%in%c("2001-11-20","1975-01-09")) %>% 
+  mutate(date_recoded = as.Date(election_date))
+
+parl %>% 
+  filter(country_name=="Denmark") %>% 
+  filter(!is.na(vote_share)&vote_share>3) %>% 
+  mutate(date_recoded = as.Date(election_date)) %>% 
+  ggplot(aes(x=date_recoded,y=vote_share))+
+  geom_point(alpha=0.15)+
+  geom_point(data=parl_den_2001,aes(x=date_recoded,y=vote_share),color="#CD082C")+
+  geom_label_repel(data=parl_den_2001,aes(x=date_recoded,y=vote_share,label=party_name_short))+
+  scale_x_date(date_breaks = "10 years",date_labels="%Y")+
+  labs(x="",
+       y="Vote Share")+
+  theme_bw()
+```
+
+## Exercise for Global vs Local Mapping
+
+Lets try this ourselves. Create a plot that shows all results of parties in Germany as shaded points and highlights the results of the SPD over time as red points.
+
+```{r exer_8, exercise=TRUE, exercise.lines = 18}
+
+```
+
+## Maps
+
+One very exciting application of ggplot is to create maps based on the data we have. There are many ways of building maps in R and we will focus on only one of those, which uses the rworldmap package. Our goal in this example is to make a map of right-wing party strength across Europe. First, we download the map data of the world using the getMap() function. Then we define the countries of the EU and create a dataset (europeCoords) with only the coordinates needed to draw the shapes of the countries in the EU. Afterwards, we create a dataset calles "europe_rightwingparties" with all seat shares of right-wing parties in the dataset in the last parliamentary election, aggregated at the country level (so if there is more than one right-wing party in a country, their results are added up). We then join these datasets together and use the "geom_polygon()" geom to draw our map. We fill the countries according to the strength of their right-wing parties in parliament, with the "scale_fill_gradient" command controlling the colors.
+
+```{r plot9.1}
+library(mapproj)
+library(rworldmap)
+worldMap <- getMap()
+EU <- c("Austria","Belgium","Bulgaria","Croatia","Cyprus",
+                   "Czech Rep.","Denmark","Estonia","Finland","France",
+                   "Germany","Greece","Hungary","Ireland","Italy","Latvia",
+                   "Lithuania","Luxembourg","Malta","Netherlands","Poland",
+                   "Portugal","Romania","Slovakia","Slovenia","Spain",
+                   "Sweden")
+indEU <- which(worldMap$NAME%in%EU)
+europeCoords <- lapply(indEU, function(i){
+  df <- data.frame(worldMap@polygons[[i]]@Polygons[[1]]@coords)
+  df$region =as.character(worldMap$NAME[i])
+  colnames(df) <- list("long", "lat", "region")
+  return(df)
+})
+
+europeCoords <- do.call("rbind", europeCoords)
+europe_rightwingparties <- parl %>% 
+  filter(country_name %in% EU) %>% 
+  left_join(parties %>% select(party_id,family_name)) %>% 
+  filter(family_name == "Right-wing" & election_type=="parliament") %>% 
+  group_by(country_name) %>% 
+  mutate(election_date_rec = as.Date(election_date),
+         seat_share = seats*100/seats_total) %>% 
+  filter(election_date_rec == max(election_date_rec)) %>% 
+  summarise(rightwing = sum(seat_share)) %>% 
+  mutate(region = case_when(
+    country_name == "Czech Republic" ~ "Czech Rep.",
+    TRUE ~ country_name
+  ))
+  
+europeCoords <- left_join(europeCoords,europe_rightwingparties)
+  
+# Plot the mapmap_id = region,
+ggplot(europeCoords) +
+  geom_polygon(aes(group=region,x=long,y=lat,fill=rightwing)) +
+  expand_limits(x = europeCoords$long, y = europeCoords$lat) +
+  theme_bw()+
+  scale_fill_gradient(low="blue", high="red")+
+  coord_map()
+```
+
+
+## Making Things Look Really Nice
+
+As a final step, we want to give some advice to round out plots and make them look even better. There are myriad ways of achieving this and ultimately a large part of plot design is a matter of taste. 
+
+### Axes and Titles
+
+Adding titles to plots makes them much more readable. You can do this in the same way as adding or changing axis titles. You can add the main title using the "title" command and a (optional) subtitle with the "subtitle" command. 
+
+Additionally, we can also extend the axes of the plot. Ggplot chooses a default axis based on the data, so if the highest value in the dataset is 10, the axis will extend slightly beyond that. However, sometimes there is a theoretical limit that makes sense, for election results this limit might be 100 (as that would mean to get all the votes in the election). We can manipulate the axis with the "xlim" command, which requires a lower and upper bound we choose for the axis (here we chose 0 and 100).
+
+```{r plot10.1}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="German Election Results",
+       subtitle="Bundestagswahlen 2017")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")
+```
+
+### Annotation layers
+
+So far, we controlled the data that is shown on the plot in the form of geoms (bars, points, lines or others) and the text on the axes. However, we can also add text to the plot that is not in the dataset itself, for example to comment on a specific data point. For this, we add the "annotate()" layer to the plot, as seen below. We have to define the type of annotation (we choose one as "label" and one as "text") and their eventual position relative to the other objects in the plot. The "x" position denotes the position of the center of the annotation on the x-axis and the "y" position does the same on the y-axis. On a categorical axis, the number denotes the n-th element on the axis, here "y=8" leads to the eighth party plotted on the y-axis (counted from the bottom), the "Sozialdemokratische Partei Deutschlands". Finally, we give the actual annotation using the "label" command.
+
+```{r plot10.2}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")+
+  annotate("label", x = 60, y = 9, label = "Eventual prime minister party")+
+  annotate("text", x = 60, y = 8, label = "Eventual junior coalition partner")
+
+```
+
+### Color scales
+
+So far, we used the preinstalled color palette whenever we colored the plots. We can also used other palettes, they are commonly installed through specific packages. One of them is the viridis color palette, which you can use with the command "scale_fill_viridis(discrete=TRUE)" after loading the viridis package. You can find more information here: https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
+
+```{r plot10.3}
+library(viridis)
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered,fill=parties_ordered))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  scale_fill_viridis(discrete=TRUE)
+```
+
+### Manual Color Scales
+
+If we want to go beyond the preinstalled color palettes but none of the other available ones are sufficient, we can also define colors for the plot ourselves. Below, we colored the plot form before in the official party colors. To achieve this, we add a variable with the Hex color names to the dataset and then use the "scale_fill_identity()" to translate those into colors in the plot (note that this option deletes the legend on the right, which was redundant anyways as the information was already on the y-axis).
+
+```{r plot10.4}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  mutate(color = case_when(
+    party_name_short == "CDU" ~ "#003865",
+    party_name_short == "SPD" ~ "#DF0029",
+    party_name_short == "AfD" ~ "#009FE1",
+    party_name_short == "FDP" ~ "#ffed00",
+    party_name_short == "PDS|Li" ~ "#FF0000",
+    party_name_short == "B90/Gru" ~ "#00A646",
+    party_name_short == "CSU" ~ "#0080c8",
+    party_name_short == "FW" ~ "#F49A00",
+    party_name_short == "PARTEI" ~ "#B92837"
+  )) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered,fill=color))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")+
+  annotate("label", x = 60, y = 9, label = "Eventual prime minister party")+
+  annotate("text", x = 60, y = 8, label = "Eventual junior coalition partner")+
+  scale_fill_identity()
+```
+
+### Moving/Layouting Legends
+
+So far, we always found the legend that ggplot automatically created to the right of the plot. We can move this legend using the theme(legend.position="bottom") command. We can also move the legend to the left, top or even delete it (theme(legend.position="none")). In the plot below, we created a new variable called "government" separating the eventual coalition parties from the others and colored them using the viridis package.
+
+```{r plot10.5}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  mutate(government = ifelse(party_name%in%c("Christlich Demokratische Union",
+                                             "Sozialdemokratische Partei Deutschlands"),"Government","Opposition")) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered,fill=government))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")+
+  annotate("label", x = 60, y = 9, label = "Eventual prime minister party")+
+  annotate("text", x = 60, y = 8, label = "Eventual junior coalition partner")+
+  scale_fill_viridis(discrete=TRUE)+
+  theme(legend.position="bottom")
+```
+
+We can delete the heading of the legend (which is just the name of the variable used for filling the bars, "government") by adding the option "legend.title = element_blank()" to the theme command. Make sure to only delete the heading if the categories themselves are self-explanatory (as are in "Government" and "Opposition").
+
+```{r plot10.6}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  mutate(government = ifelse(party_name%in%c("Christlich Demokratische Union",
+                                             "Sozialdemokratische Partei Deutschlands"),"Government","Opposition")) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered,fill=government))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")+
+  annotate("label", x = 60, y = 9, label = "Eventual prime minister party")+
+  annotate("text", x = 60, y = 8, label = "Eventual junior coalition partner")+
+  scale_fill_viridis(discrete=TRUE)+
+  theme(legend.position="bottom",
+        legend.title = element_blank())
+```
+
+The "theme" command also takes many other options, that come down to personal taste. We show some of them in the plot below (which admittedly makes for a mess of a final plot). We make the x axis title larger (by adding "axis.title.x = element_text(size=16)"), tilt and bolden the y axis ("axis.text.y = element_text(face="bold",angle = 20)") and color and italize the heading ("plot.title = element_text(face="italic",color="darkgreen")").
+
+```{r plot10.7}
+parl %>% 
+  filter(country_name=="Germany" & election_date=="2017-09-24") %>% 
+  mutate(parties_ordered = reorder(party_name,vote_share)) %>% 
+  mutate(government = ifelse(party_name%in%c("Christlich Demokratische Union",
+                                             "Sozialdemokratische Partei Deutschlands"),"Government","Opposition")) %>% 
+  ggplot(aes(x=vote_share,y=parties_ordered,fill=government))+
+  geom_col()+
+  labs(x="Vote Share",
+       y="",
+       title="2017 German Election Results")+
+  theme_bw()+
+  xlim(0,100)+
+  geom_vline(xintercept=5,lty="dashed")+
+  annotate("text", x = 60, y = 9, label = "PM")+
+  annotate("text", x = 60, y = 8, label = "Coalition")+
+  scale_fill_viridis(discrete=TRUE)+
+  theme(legend.position="bottom",
+        legend.title = element_blank(),
+        axis.title.x = element_text(size=16),
+        axis.text.y = element_text(face="bold",angle = 20),
+        plot.title = element_text(face="italic",color="darkgreen"))
+```
+
+## Final Words
+
+That's it, you made it through module 2 of the IntrotoR. Congratulations! Please submit yur answers in the form below to get this course credited towards the certificate. If you want to come back to this course, you can just restart it or navigate back in the menu on the left. Remember, it is less about knowing it all by heart, but rather knowing where to find the information. It is totally fine to come back to this course to copy-paste some command if you need it!
+
+We hope you enjoyed the course and learned something in the process.
