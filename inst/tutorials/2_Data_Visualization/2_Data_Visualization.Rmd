@@ -21,7 +21,7 @@ library(learnr)
 
 Welcome to Module 2 of the Curriculum 4.0 certificate course. This module will deal with all aspects of data visualization. We will show you the basics of ggplot2, the most common package for plotting things in R. 
 
-This course assumes that you already have basic knowledge of R, especially with regard to the following topics: Data structures (data frames, vectors, ...) and the tidyverse family (select, filter, summarise, ...). If you are not familiar with these topics, please start with or go back to the module "Introduction to R".
+This course assumes that you already have basic knowledge of R, especially with regard to the following topics: Data structures (data frames, vectors, ...) and the tidyverse family (select, filter, summarize, ...). If you are not familiar with these topics, please start with or go back to the module "Introduction to R".
 
 Some practical tips: You can repeat this and other modules as often as you like. It is completely allowed (even encouraged) to copy-paste code from this module and adapt to whatever you want to do, don't start from scratch in a new project. If you are stuck trying to get R to do something, check whether someone online has already posted an answer (for example on stackexchange). 
 
