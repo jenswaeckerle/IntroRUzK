@@ -20,3 +20,7 @@ devtools::install_github("jenswaeckerle/IntroRUzK")
 ```
 learnr::run_tutorial("1_Intro_R", "IntroRUzK")
 ```
+7. Start the second lesson:
+```
+learnr::run_tutorial("2_Data_Visualization", "IntroRUzK")
+```
