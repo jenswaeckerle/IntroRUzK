@@ -25,5 +25,4 @@ Imports:
     magrittr,
     readr,
     readxl
-Remotes: 
-    zmeers/ggparliament
+Remotes: zmeers/ggparliament
