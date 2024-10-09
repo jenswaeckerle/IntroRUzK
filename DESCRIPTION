@@ -20,9 +20,10 @@ BugReports: https://github.com/jenswaeckerle/IntroRUzK/issues
 Imports: 
     learnr,
     dplyr,
-    ggparliament,
     ggplot2,
     installr,
     magrittr,
     readr,
     readxl
+Remotes: 
+    zmeers/ggparliament
