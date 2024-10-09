@@ -21,6 +21,7 @@ Imports:
     learnr,
     dplyr,
     ggplot2,
+    ggparliament,
     installr,
     magrittr,
     readr,
